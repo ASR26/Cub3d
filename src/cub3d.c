@@ -34,6 +34,7 @@ int	ft_cub3d(char *scenefile)
 
 	ft_init_info(&info);
 	ft_parse_scene(scenefile, &info);
+	ft_set_info(&info);
 	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);
