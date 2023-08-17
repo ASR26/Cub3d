@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/17 08:30:16 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/17 10:07:25 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ void	ft_get_map(t_cub_info *info, int i)
 		if (info->map[j][0] == 0)
 			info->map = ft_arrremove(info->map, j);
 		else
-			break;
+			break ;
 		j--;
 	}
 }
@@ -269,6 +269,8 @@ int	ft_parse_scene(char *scenefile, t_cub_info *info)
 	ft_checkext(scenefile);
 	ft_read_scene(scenefile, info);
 	ft_get_elements(info);
+	ft_check_closedmap(info);
+	ft_check_oneplayer(info);
 	return (0);
 }
 
