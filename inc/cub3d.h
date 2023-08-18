@@ -41,6 +41,17 @@ typedef struct s_cub_info
 	int		ceil_col[3];
 }			t_cub_info;
 
+typedef struct s_player_info
+{
+	double	xpos;
+	double	ypos;
+	double	xdir;
+	double	ydir;
+	double	zdir;
+	double	xcamera;
+	double	ycamera;
+}			t_player_info;
+
 /* ------------------------------- arr_utils.c ------------------------------ */
 
 int		ft_arrlen(char **arr);
@@ -73,5 +84,5 @@ char	*ft_getstr(char *line, int len, int *total);
 /* ---------------------------- ft_parse_scene.c ---------------------------- */
 
 int		ft_parse_scene(char *scenefile, t_cub_info *info);
-
+void	ft_check_oneplayer(t_cub_info *info);
 #endif

@@ -269,7 +269,7 @@ int	ft_parse_scene(char *scenefile, t_cub_info *info)
 	ft_checkext(scenefile);
 	ft_read_scene(scenefile, info);
 	ft_get_elements(info);
-	ft_check_closedmap(info);
+	//ft_check_closedmap(info);
 	ft_check_oneplayer(info);
 	return (0);
 }
