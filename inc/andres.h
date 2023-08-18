@@ -12,13 +12,15 @@
 
 #ifndef ANDRES_H
 # define ANDRES_H
-
+# include "cub3d.h"
 typedef struct s_draw
 {
 	mlx_texture_t   *n_wall;
 	mlx_texture_t	*s_wall;
 	mlx_texture_t	*w_wall;
 	mlx_texture_t	*e_wall;
-}			t_draw;
+}			        t_draw;
+
+
 
 #endif
