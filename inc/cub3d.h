@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:43:07 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/18 08:49:53 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # include "../libft/libft.h"
 # include "../MLX/include/MLX42/MLX42.h"
+
+# include "yolanthe.h"
+# include "andres.h"
 
 /* close read write */
 # include <unistd.h>
