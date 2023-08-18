@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:30:54 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/18 08:43:07 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int		ft_arrlen(char **arr);
 char	*ft_strtrimnl(char *str);
 char	**ft_arrapp(char **arr, char *app);
 char	**ft_arrremove(char **arr, int pos);
+char	**ft_arrdup(char **arr);
 
 /* --------------------------------- cub3d.c -------------------------------- */
 
@@ -86,5 +87,11 @@ char	*ft_getstr(char *line, int len, int *total);
 /* ---------------------------- ft_parse_scene.c ---------------------------- */
 
 int		ft_parse_scene(char *scenefile, t_cub_info *info);
+
+/* ---------------------------- ft_strjoinfree.c ---------------------------- */
+
+char	*ft_substrfree(char *str, unsigned int start, size_t len);
+char	*ft_strjoinfree(char *begin, char *end, int num);
+
 void	ft_check_oneplayer(t_cub_info *info);
 #endif

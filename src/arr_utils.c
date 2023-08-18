@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:51:56 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/15 12:54:33 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/18 08:42:54 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,27 @@ char	**ft_arrremove(char **arr, int pos)
 	new[len - 1] = NULL;
 	free(arr);
 	return (new);
+}
+
+char	**ft_arrdup(char **arr)
+{
+	char	**arrdup;
+	int		arrlen;
+	int		i;
+
+	arrlen = ft_arrlen(arr);
+	arrdup = malloc((arrlen + 1) * sizeof(char *));
+	if (arrdup)
+	{
+		i = 0;
+		while (arr[i])
+		{
+			arrdup[i] = ft_strdup(arr[i]);
+			if (!arrdup[i])
+				return (ft_freearr(arrdup), NULL);
+			i++;
+		}
+		arrdup[i] = NULL;
+	}
+	return (arrdup);
 }
