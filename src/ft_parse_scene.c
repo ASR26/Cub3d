@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/17 10:07:25 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/18 08:33:48 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,14 +198,34 @@ void	ft_check_char(char c, t_cub_info *info)
 		ft_errfreeexit("Invalid character in map.", info);
 }
 
+void	ft_delandinsertspace(char **str, int p, int n)
+{
+	char	*s;
+	int		i;
+
+	s = ft_substr(*str, 0, p);
+	i = 0;
+	while (i < n)
+	{
+		s = ft_straddfree(s, ' ');
+		i++;
+	}
+	s = ft_strjoinfree(s, ft_substr(*str, p + 1, ft_strlen(*str + p + 1)), 3);
+	free(*str);
+	*str = s;
+}
+
 void	ft_checkmapline(t_cub_info *info, int i)
 {
 	int		j;
-	char	*new;
 
 	j = 0;
 	while (info->scene[i][j])
 	{
+		if (info->scene[i][j] == '\t')
+		{
+			ft_delandinsertspace(&(info->scene[i]), j, 4 - j % 4);
+		}
 		ft_check_char(info->scene[i][j], info);
 		j++;
 	}
@@ -241,6 +261,58 @@ void	ft_get_map(t_cub_info *info, int i)
 	}
 }
 
+int	ft_strlen_no_space_end(char *str)
+{
+	int	len;
+
+	len = ft_strlen(str);
+	while (len > 0)
+	{
+		if (str[len - 1] < 32)
+			len--;
+		else
+			break ;
+	}
+	return (len);
+}
+
+char	*ft_addspaces(char *str, int len, int maxlen)
+{
+	while (len < maxlen)
+	{
+		str = ft_straddfree(str, ' ');
+		len++;
+	}
+	return (str);
+}
+
+void	ft_makemap_rectangular(t_cub_info *info)
+{
+	int	i;
+	int	len;
+	int	maxlen;
+
+	i = 0;
+	maxlen = 0;
+	while (info->map[i])
+	{
+		len = ft_strlen_no_space_end(info->map[i]);
+		if (len > maxlen)
+			maxlen = len;
+		i++;
+	}
+	i = 0;
+	while (info->map[i])
+	{
+		len = ft_strlen(info->map[i]);
+		if (len < maxlen)
+			info->map[i] = ft_addspaces(info->map[i], len, maxlen);
+		else if (len > maxlen)
+			info->map[i] = ft_substrfree(info->map[i], 0, maxlen);
+		i++;
+	}
+}
+
 void	ft_get_elements(t_cub_info *info)
 {
 	int	i;
@@ -262,6 +334,67 @@ void	ft_get_elements(t_cub_info *info)
 	}
 	ft_skip_emptyline(info, i);
 	ft_get_map(info, i);
+	if (!info->map || !info->map[0])
+		ft_errfreeexit("No map encountered in scene description file.", info);
+	ft_makemap_rectangular(info);
+	info->wid = ft_strlen(info->map[0]);
+	info->hei = ft_arrlen(info->map);
+}
+int	ft_step(char **map, int row, int col, t_cub_info *info)
+{
+	if (map[row][col] == '1' || map[row][col] == 'x')
+		return (-1);
+	else if (row == 0 || row == info->hei - 1 || col == 0 \
+			|| col == info->wid -1)
+	{
+		printf("%s\n", map[row]);
+		printf("row -> %i col -> %i c -> %c\n", row, col, map[row][col]);
+		ft_errfreeexit("The map is not closed.", info);
+		return (-2);
+	}
+	else if (info->map[row][col] == ' ')
+	{
+		ft_errfreeexit("The map is not closed.", info);
+		return (-2);
+	}
+	else
+		return (0);
+}
+
+void	ft_fillx(char **map, int row, int col, t_cub_info *info)
+{
+	map[row][col] = 'x';
+	if (row + 1 < info->hei && ft_step(map, row + 1, col, info) == 0)
+		ft_fillx(map, row + 1, col, info);
+	if (row - 1 >= 0 && ft_step(map, row - 1, col, info) == 0)
+		ft_fillx(map, row - 1, col, info);
+	if (col + 1 < info->wid && ft_step(map, row, col + 1, info) == 0)
+		ft_fillx(map, row, col + 1, info);
+	if (col - 1 >= 0 && ft_step(map, row, col - 1, info) == 0)
+		ft_fillx(map, row, col - 1, info);
+}
+
+void	ft_check_closedmap(t_cub_info *info)
+{
+	int		i;
+	int		j;
+	char	**mapdup;
+
+	i = 0;
+	mapdup = ft_arrdup(info->map);
+	while (mapdup[i])
+	{
+		j = 0;
+		while (mapdup[i][j])
+		{
+			if (mapdup[i][j] == '0' || mapdup[i][j] == 'N' || mapdup[i][j] == \
+				'S' || mapdup[i][j] == 'W' || mapdup[i][j] == 'E')
+				ft_fillx(mapdup, i, j, info);
+			j++;
+		}
+		i++;
+	}
+	ft_freearr(mapdup);
 }
 
 int	ft_parse_scene(char *scenefile, t_cub_info *info)
@@ -269,7 +402,7 @@ int	ft_parse_scene(char *scenefile, t_cub_info *info)
 	ft_checkext(scenefile);
 	ft_read_scene(scenefile, info);
 	ft_get_elements(info);
-	//ft_check_closedmap(info);
+	ft_check_closedmap(info);
 	ft_check_oneplayer(info);
 	return (0);
 }

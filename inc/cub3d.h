@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/15 15:04:37 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/18 08:30:54 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ typedef struct s_cub_info
 {
 	char	**scene;
 	char	**map;
+	int		hei;
+	int		wid;
 	char	*n_wall;
 	char	*s_wall;
 	char	*w_wall;
