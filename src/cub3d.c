@@ -25,6 +25,7 @@ void	ft_init_info(t_cub_info *info)
 	info->floor_col[0] = -1;
 	info->floor_col[1] = -1;
 	info->floor_col[2] = -1;
+	info->pov = 0;
 	info->ceil_col[0] = -1;
 	info->ceil_col[1] = -1;
 	info->ceil_col[2] = -1;

@@ -53,7 +53,7 @@ typedef struct s_player_info
 	double	xdir;
 	double	ydir;
 	double	zdir;
-	double	fov;
+	double	pov;
 	double	xcamera;
 	double	ycamera;
 }			t_player_info;
