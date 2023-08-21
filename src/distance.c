@@ -6,11 +6,11 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 12:04:11 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 08:31:50 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../inc/cub3d.h"
 
 void	ft_calculatedist(t_cub_info *info, t_window_info *window, t_player_info *player)
 {

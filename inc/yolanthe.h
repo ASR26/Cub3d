@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:49:01 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 11:58:52 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/21 08:31:28 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@ typedef struct s_all_info
 
 /* --------------------------------- BULLSHIT --------------------------------- */
 
-typedef struct s_draw
+/* typedef struct s_draw
 {
 	mlx_image_t	*n_wall;
 	mlx_image_t	*e_wall;
 	mlx_image_t	*s_wall;
 	mlx_image_t	*w_wall;
-}				t_draw;
+}				t_draw; */
 
 #endif
