@@ -13,4 +13,5 @@
 NAME = cub3d
 
 all:
-	gcc src/*.c libft/*.c -o cub3d
+	make -C ./MLX all
+	gcc src/*.c libft/*.c -o cub3d MLX/libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
