@@ -25,4 +25,5 @@ typedef struct s_draw
 
 float   y_projection (float angle, float dist);
 float   x_projection (float angle, float dist);
+void	rotate_z(double *x, double *y, double ang);
 #endif

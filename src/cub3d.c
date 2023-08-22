@@ -52,6 +52,9 @@ int	ft_cub3d(char *scenefile)
 	printf("player ang-> %f\n", cos(M_PI/4));
 	printf("random cos -> %f\n", x_projection(5*M_PI/6, 3));
 	printf("random sin -> %f\n", y_projection(5*M_PI/6, 3));
+	rotate_z(&player.xdir, &player.ydir, M_PI/2);
+	printf("player rotx-> %f\n", player.xdir);
+	printf("player roty-> %f\n", player.ydir);
 	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);

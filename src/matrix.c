@@ -10,10 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/defines.h"
-#include "../inc/utils.h"
+#include "../inc/cub3d.h"
 #include <math.h>
-
+/*
 t_point	mul_mat(float matrix[3][3], t_point point)
 {
 	int		i;
@@ -78,28 +77,19 @@ void	rotate_y(t_point *points, t_point *proyection, float ang, int len)
 		i++;
 	}
 }
-
-void	rotate_z(t_point *points, t_point *proyection, float ang, int len)
+*/
+void	rotate_z(double *x, double *y, double ang)
 {
-	int		i;
-	float	rad;
-	float	proyect_matrix[3][3];
+	double	dupx;
+	double	dupy;
 
-	rad = ang * M_PI / 180;
-	matrix_init(proyect_matrix);
-	proyect_matrix[0][0] = cos(rad);
-	proyect_matrix[0][1] = -sin(rad);
-	proyect_matrix[1][0] = sin(rad);
-	proyect_matrix[1][1] = cos(rad);
-	proyect_matrix[2][2] = 1;
-	i = 0;
-	while (i < len)
-	{
-		proyection[i] = mul_mat(proyect_matrix, points[i]);
-		i++;
-	}
+	dupx = *x;
+	dupy = *y;
+	ang = -ang;
+	*x = dupx * cos(ang) - dupy * sin(ang);
+	*y = dupx * sin(ang) + dupy * cos(ang);
 }
-
+/*
 void	orto_proyection(t_point *points, t_point *proyection, int len)
 {
 	int		i;
@@ -114,4 +104,4 @@ void	orto_proyection(t_point *points, t_point *proyection, int len)
 		proyection[i] = mul_mat(proyect_matrix, points[i]);
 		i++;
 	}
-}
+}*/
