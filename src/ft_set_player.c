@@ -78,7 +78,7 @@ void    set_player_rot(t_player_info *player, char c)
     else if (c == 'N')
     {
         player->xdir = 0;
-        player->ydir = 1;
+        player->ydir = -1;
         player->pov = M_PI / 2;
     }
     else if (c == 'W')
@@ -90,7 +90,7 @@ void    set_player_rot(t_player_info *player, char c)
     else if (c == 'S')
     {
         player->xdir = 0;
-        player->ydir = -1;
+        player->ydir = 1;
         player->pov = 3 * M_PI / 2;
     }
 }
