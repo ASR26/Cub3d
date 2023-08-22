@@ -13,6 +13,7 @@
 #ifndef ANDRES_H
 # define ANDRES_H
 # include "cub3d.h"
+
 typedef struct s_draw
 {
 	mlx_texture_t   *n_wall;
@@ -22,5 +23,6 @@ typedef struct s_draw
 }			        t_draw;
 
 
-
+float   y_projection (float angle, float dist);
+float   x_projection (float angle, float dist);
 #endif

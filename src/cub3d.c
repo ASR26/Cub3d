@@ -25,7 +25,6 @@ void	ft_init_info(t_cub_info *info)
 	info->floor_col[0] = -1;
 	info->floor_col[1] = -1;
 	info->floor_col[2] = -1;
-	info->pov = 0;
 	info->ceil_col[0] = -1;
 	info->ceil_col[1] = -1;
 	info->ceil_col[2] = -1;
@@ -49,6 +48,10 @@ int	ft_cub3d(char *scenefile)
 	printf("player y-> %f\n", player.ypos);
 	printf("player rotx-> %f\n", player.xdir);
 	printf("player roty-> %f\n", player.ydir);
+	printf("player pov-> %f\n", player.pov);
+	printf("player ang-> %f\n", cos(M_PI/4));
+	printf("random cos -> %f\n", x_projection(5*M_PI/6, 3));
+	printf("random sin -> %f\n", y_projection(5*M_PI/6, 3));
 	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);
