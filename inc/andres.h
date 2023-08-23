@@ -12,7 +12,8 @@
 
 #ifndef ANDRES_H
 # define ANDRES_H
-
+# define ROT_SPEED M_PI/6
+# define MOV_SPEED 0.5f
 typedef struct s_draw
 {
 	mlx_texture_t   *n_wall;
