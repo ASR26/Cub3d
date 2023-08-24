@@ -116,9 +116,16 @@ void  find_player_rot(t_player_info *player, t_cub_info *info)
     }
 }
 
+void    set_player_camera(t_player_info *player)
+{
+    player->xcamera = -player->ydir;
+    player->ycamera = player->xdir;
+}
+
 void    ft_set_player(t_player_info *player, t_cub_info *info)
 {
     player->xpos = find_player_x(player, info);
     player->ypos = find_player_y(player, info);
     find_player_rot(player, info);
+    set_player_camera(player);
 }

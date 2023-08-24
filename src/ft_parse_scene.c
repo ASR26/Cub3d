@@ -12,6 +12,8 @@
 
 #include "../inc/cub3d.h"
 
+void    ft_check_dup_param(t_cub_info *info);
+
 int	ft_checkext(char *scenefile)
 {
 	int	len;
@@ -333,6 +335,7 @@ void	ft_get_elements(t_cub_info *info)
 		i++;
 	}
 	ft_skip_emptyline(info, i);
+	ft_check_dup_param(info);
 	ft_get_map(info, i);
 	if (!info->map || !info->map[0])
 		ft_errfreeexit("No map encountered in scene description file.", info);

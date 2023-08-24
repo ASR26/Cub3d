@@ -13,6 +13,8 @@
 #include "../inc/cub3d.h"
 
 void    ft_set_player(t_player_info *player, t_cub_info *info);
+void    rot_player(t_player_info *player, int i);
+void    move_player(t_cub_info *cub, t_player_info *player, int i);
 
 void	ft_init_info(t_cub_info *info)
 {
@@ -38,23 +40,22 @@ int	ft_cub3d(char *scenefile)
 	ft_init_info(&info);
 	ft_parse_scene(scenefile, &info);
 	ft_set_player(&player, &info);
-	printf("hei-> %i\n", info.hei);
-	printf("wid-> %i\n", info.wid);
-	printf("n-> %s\n", info.n_wall);
-	printf("s-> %s\n", info.s_wall);
-	printf("w-> %s\n", info.w_wall);
-	printf("e-> %s\n", info.e_wall);
 	printf("player x-> %f\n", player.xpos);
 	printf("player y-> %f\n", player.ypos);
 	printf("player rotx-> %f\n", player.xdir);
 	printf("player roty-> %f\n", player.ydir);
+	printf("player camx-> %f\n", player.xcamera);
+	printf("player camy-> %f\n", player.ycamera);
 	printf("player pov-> %f\n", player.pov);
-	printf("player ang-> %f\n", cos(M_PI/4));
-	printf("random cos -> %f\n", x_projection(5*M_PI/6, 3));
-	printf("random sin -> %f\n", y_projection(5*M_PI/6, 3));
-	rotate_z(&player.xdir, &player.ydir, M_PI/2);
-	printf("player rotx-> %f\n", player.xdir);
-	printf("player roty-> %f\n", player.ydir);
+	rot_player(&player, 1);
+	int i = 0;
+	while (i < 20)
+	{
+		move_player(&info, &player, 'S');
+		i++;
+	}
+	printf("player newopsx-> %f\n", player.xpos);
+	printf("player newposy-> %f\n", player.ypos);
 	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);
