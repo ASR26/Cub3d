@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/24 10:02:30 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/24 10:59:38 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ double	ft_getangx(double ang)
 	{
 		return (ang - M_PI);
 	}
-	else if (ang >= 3 * M_PI / 2&& ang < 2 * M_PI)
+	else if (ang >= 3 * M_PI / 2 && ang < 2 * M_PI)
 	{
 		return (2 * M_PI - ang);
 	}
@@ -236,7 +236,7 @@ void 	ft_calculatedist(t_cub_info *info, t_player_info *player, double ang, t_im
 	{
 		ft_copy_impact(impact, impacty);
 	}
-	else if (impacty.wall == 0 || impacty.dist > impactx.dist)
+	else if (impacty.wall == 0 || impacty.dist >= impactx.dist)
 	{
 		ft_copy_impact(impact, impactx);
 	}
@@ -270,12 +270,12 @@ void	ft_angleloop(t_cub_info *info, t_window_info *window, t_player_info *player
 
 	i = 0;
 	ang = M_PI / 4;
-	while (i < WID / 2)
+	while (i <= WID / 2)
 	{
 		delta_ang = ft_calculate_deltaang(i);
 		printf("delatang -> %f\n", delta_ang);
 		ft_calculatedist(info, player, ang - delta_ang, &(window->dist[i]));
-		ft_calculatedist(info, player, -ang + delta_ang, &(window->dist[WID - 1 - i]));
+		ft_calculatedist(info, player, -ang + delta_ang, &(window->dist[WID - i]));
 		i++;
 	}
 }
