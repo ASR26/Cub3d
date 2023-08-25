@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:49:53 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/25 09:30:22 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,15 @@ typedef struct s_player_info
 	double	xcamera;
 	double	ycamera;
 }			t_player_info;
+
+typedef struct s_all_info
+{
+	t_cub_info		*info;
+	t_window_info	*window;
+	t_player_info	*player;
+	t_draw			*draw;
+}			t_all_info;
+
 
 /* ------------------------------- arr_utils.c ------------------------------ */
 

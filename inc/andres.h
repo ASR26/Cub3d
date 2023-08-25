@@ -6,14 +6,14 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:49:26 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:49:41 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/25 08:14:15 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ANDRES_H
 # define ANDRES_H
-# define ROT_SPEED M_PI/6
-# define MOV_SPEED 0.5f
+# define ROT_SPEED M_PI/36
+# define MOV_SPEED 0.1f
 typedef struct s_draw
 {
 	mlx_texture_t   *n_wall;

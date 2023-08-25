@@ -4,6 +4,7 @@ void	ft_skipspace(char *line, int *len);
 
 void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
 {
+	(void)info;//??
 	if (ft_strlen(line) >= 2 && line[0] == 'N' && line[1] == 'O')
 		*ct += 1;
 	else if (ft_strlen(line) >= 2 && line[0] == 'S' && line[1] == 'O')

@@ -1,4 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/24 11:12:43 by ysmeding          #+#    #+#             */
+/*   Updated: 2023/08/25 12:04:08 by ysmeding         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../inc/cub3d.h"
+
+double	ft_setang(double ang);
 
 void    move_player_front(t_cub_info *cub, t_player_info *player, int i)
 {
@@ -39,4 +54,7 @@ void    move_player(t_cub_info *cub, t_player_info *player, int i)
 void    rot_player(t_player_info *player, int i)
 {
     rotate_z(&player->xdir, &player->ydir, ROT_SPEED * i); //i is the direction to rotate
+    rotate_z(&player->xcamera, &player->ycamera, ROT_SPEED * i);
+    player->pov += ROT_SPEED * i;
+    player->pov = ft_setang(player->pov);
 }

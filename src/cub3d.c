@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:40:55 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/24 11:14:24 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	ft_cub3d(char *scenefile)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+/* int	main(int argc, char **argv)
 {
 	if (argc == 2)
 	{
@@ -75,4 +75,4 @@ int	main(int argc, char **argv)
 			ft_putendl_fd("Too many arguments passed to the program.", 2);
 		return (1);
 	}
-}
+} */

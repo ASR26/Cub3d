@@ -45,6 +45,7 @@ double  find_player_x(t_player_info *player, t_cub_info *info)
 {
     int i;
 
+    (void)player;//??
     i = -1;
     while (info->map[++i])
     {
@@ -58,6 +59,7 @@ double  find_player_y(t_player_info *player, t_cub_info *info)
 {
     int i;
 
+    (void)player;//??
     i = -1;
     while (info->map[++i])
     {

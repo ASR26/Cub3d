@@ -1,7 +1,7 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture			    
-WE ./path_to_the_west_texture   
-EA ./path_to_the_east_texture  				
+NO ./textures/rainbowYA.png
+SO ./textures/rainbowYA.png			    
+WE ./textures/rainbowYA.png  
+EA ./textures/rainbowYA.png				
 
 F 255,100,0
 C 225,30,108
@@ -28,9 +28,9 @@ C 225,30,108
                100000000001
                100000000001
                100000000001
+               10000N000001
                100000000001
                100000000001
                100000000001
                100000000001
-               1N0000000001
                111111111111

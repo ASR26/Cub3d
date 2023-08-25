@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:49:01 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/24 09:46:21 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/25 09:35:35 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <math.h>
 
 #define WID 1800
+#define HEI 1080
+#define WALL_HEI 1000
 
 typedef struct s_impact
 {
@@ -55,14 +57,6 @@ typedef struct s_dist
 	int		dirx;
 	int		diry;
 }			t_dist;
-
-typedef struct s_all_info
-{
-	//t_cub_info		*info;
-	t_window_info	*window;
-	//t_player_info	*player;
-}			t_all_info;
-
 
 
 
