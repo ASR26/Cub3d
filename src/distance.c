@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/25 11:17:43 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/08/25 18:11:34 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,13 +232,9 @@ void 	ft_calculatedist(t_cub_info *info, t_player_info *player, double ang, t_im
 	if (dist.disty >= 0)
 		ft_loopycrossings(info, player, &dist, &impacty);
 	if (impactx.wall == 0 || impactx.dist > impacty.dist)
-	{
 		ft_copy_impact(impact, impacty);
-	}
 	else if (impacty.wall == 0 || impacty.dist >= impactx.dist)
-	{
 		ft_copy_impact(impact, impactx);
-	}
 	impact->projx = x_projection(M_PI/2 - ang, impact->dist);
 	impact->projy = y_projection(M_PI/2 - ang, impact->dist);
 }
