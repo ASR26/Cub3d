@@ -1,10 +1,10 @@
-NO ./textures/rainbowYA.png
-SO ./textures/rainbowYA.png			    
-WE ./textures/rainbowYA.png  
-EA ./textures/rainbowYA.png				
+NO ./textures/wall.png
+SO ./textures/floor.png		    
+WE ./textures/space.png 
+EA ./textures/woodendoor.png 				
 
-F 255,100,0
-C 225,30,108
+F 113,66,52
+C 100,149,237		
 
 111111111111                  111111111111
  100000000001                100000000001

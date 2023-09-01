@@ -1,6 +1,6 @@
 #include "../inc/cub3d.h"
 
-void	ft_skipspace(char *line, int *len);
+//void	ft_skipspace(char *line, int *len);
 
 void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
 {

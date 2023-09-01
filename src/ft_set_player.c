@@ -1,6 +1,6 @@
 #include "../inc/cub3d.h"
 
-void    ft_set_player(t_player_info *player, t_cub_info *info);
+//void    ft_set_player(t_player_info *player, t_cub_info *info);
 
 int	ft_strchr_r(const char *str, char *check)
 {

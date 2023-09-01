@@ -6,15 +6,23 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/24 11:14:24 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/01 08:06:05 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-void    ft_set_player(t_player_info *player, t_cub_info *info);
-void    rot_player(t_player_info *player, int i);
-void    move_player(t_cub_info *cub, t_player_info *player, int i);
+// void    ft_set_player(t_player_info *player, t_cub_info *info);
+// void    rot_player(t_player_info *player, int i);
+// void    move_player(t_cub_info *cub, t_player_info *player, int i);
+
+// void	ft_initwindow(t_window_info	*window);
+// void	ft_hook(void *arg);
+// void	ft_game(t_cub_info *info, t_player_info *player);
+
+
+// void	ft_init_info(t_cub_info *info);
+// void    ft_set_player(t_player_info *player, t_cub_info *info);
 
 void	ft_init_info(t_cub_info *info)
 {
@@ -40,28 +48,29 @@ int	ft_cub3d(char *scenefile)
 	ft_init_info(&info);
 	ft_parse_scene(scenefile, &info);
 	ft_set_player(&player, &info);
-	printf("player x-> %f\n", player.xpos);
-	printf("player y-> %f\n", player.ypos);
-	printf("player rotx-> %f\n", player.xdir);
-	printf("player roty-> %f\n", player.ydir);
-	printf("player camx-> %f\n", player.xcamera);
-	printf("player camy-> %f\n", player.ycamera);
-	printf("player pov-> %f\n", player.pov);
-	rot_player(&player, 1);
-	int i = 0;
-	while (i < 20)
-	{
-		move_player(&info, &player, 'S');
-		i++;
-	}
-	printf("player newopsx-> %f\n", player.xpos);
-	printf("player newposy-> %f\n", player.ypos);
+	// printf("player x-> %f\n", player.xpos);
+	// printf("player y-> %f\n", player.ypos);
+	// printf("player rotx-> %f\n", player.xdir);
+	// printf("player roty-> %f\n", player.ydir);
+	// printf("player camx-> %f\n", player.xcamera);
+	// printf("player camy-> %f\n", player.ycamera);
+	// printf("player pov-> %f\n", player.pov);
+	// rot_player(&player, 1);
+	// int i = 0;
+	// while (i < 20)
+	// {
+	// 	move_player(&info, &player, 'S');
+	// 	i++;
+	// }
+	// printf("player newopsx-> %f\n", player.xpos);
+	// printf("player newposy-> %f\n", player.ypos);
+	ft_game(&info, &player);
 	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);
 }
 
-/* int	main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	if (argc == 2)
 	{
@@ -75,4 +84,4 @@ int	ft_cub3d(char *scenefile)
 			ft_putendl_fd("Too many arguments passed to the program.", 2);
 		return (1);
 	}
-} */
+}

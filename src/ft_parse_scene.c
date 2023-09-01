@@ -6,13 +6,13 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/18 08:33:48 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/01 08:12:08 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d.h"
 
-void    ft_check_dup_param(t_cub_info *info);
+//void    ft_check_dup_param(t_cub_info *info);
 
 int	ft_checkext(char *scenefile)
 {
@@ -343,6 +343,7 @@ void	ft_get_elements(t_cub_info *info)
 	info->wid = ft_strlen(info->map[0]);
 	info->hei = ft_arrlen(info->map);
 }
+
 int	ft_step(char **map, int row, int col, t_cub_info *info)
 {
 	if (map[row][col] == '1' || map[row][col] == 'x')

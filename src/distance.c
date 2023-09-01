@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/08/25 18:11:34 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/01 08:26:11 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,11 +188,12 @@ void	ft_loopycrossings(t_cub_info *info, t_player_info *player, t_dist *dist, t_
 	// printf("ypos -> %f\n", impact->posy);
 	// printf("wid -> %i\n", info->wid );
 	// printf("hei -> %i\n", info->hei);
-	while ((impact->posx > 0 && impact->posx < info->wid) && (impact->posy > 0
+	//printf("ycross -> %i\n", dist->ycross);
+	while ((impact->posx > 0 && impact->posx < info->wid) && (dist->ycross >= 0
 		&& dist->ycross < info->hei))
 	{
 		// printf("xpos -> %i\n", (int)(impact->posx - fmod(impact->posx, 1.0)));
-		// printf("ypos -> %i\n", dist->ycross);
+		// printf("ycross -> %i\n", dist->ycross);
 		if (info->map[dist->ycross] \
 		[(int)(impact->posx - fmod(impact->posx, 1.0))] == '1')
 		{
@@ -235,8 +236,15 @@ void 	ft_calculatedist(t_cub_info *info, t_player_info *player, double ang, t_im
 		ft_copy_impact(impact, impacty);
 	else if (impacty.wall == 0 || impacty.dist >= impactx.dist)
 		ft_copy_impact(impact, impactx);
-	impact->projx = x_projection(M_PI/2 - ang, impact->dist);
-	impact->projy = y_projection(M_PI/2 - ang, impact->dist);
+	impact->projx = x_projection(M_PI / 2 - ang, impact->dist);
+	impact->projy = y_projection(M_PI / 2 - ang, impact->dist);
+
+	/* printf("\ndist -> %f\n", impact->dist);
+	printf("wall -> %c\n", impact->wall);
+	printf("posx -> %f\n", impact->posx);
+	printf("posy -> %f\n", impact->posy);
+	printf("projx -> %f\n", impact->projx);
+	printf("projy -> %f\n\n", impact->projy); */
 }
 
 double	ft_calculate_deltaang(int i)
@@ -264,11 +272,15 @@ void	ft_angleloop(t_cub_info *info, t_window_info *window, t_player_info *player
 
 	i = 1;
 	ang = M_PI / 4;
-	while (i <= WID / 2)
+	while (i < WID / 2)
 	{
+		//printf("i -> %i, other -> %i\n", i, WID-1-i);
 		delta_ang = ft_calculate_deltaang(i);
+		//printf("computed delta -> %f\n", delta_ang);
 		ft_calculatedist(info, player, ang - delta_ang, &(window->dist[i]));
+		//printf("computed left dist\n");
 		ft_calculatedist(info, player, -ang + delta_ang, &(window->dist[WID - 1 - i]));
+		//printf("computed right dist\n");
 		i++;
 	}
 }
