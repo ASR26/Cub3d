@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:55:36 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/04 13:32:58 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:04:26 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,30 @@ int ft_floor(float pos)
 	return ((int) (pos - fmod(pos, 1.0)));
 }
 
+int	ft_dir(t_player_info *player, char c)
+{
+	if (c == 'x')
+	{
+		if (player->pov < M_PI / 2 || player->pov > 3 * M_PI / 2)
+			return (1);
+		else if (player->pov > M_PI / 2 && player->pov < 3 * M_PI / 2)
+			return (-1);
+		else
+			return (0);
+	}
+	else if (c == 'y')
+	{
+		if (player->pov > 0 && player->pov < M_PI)
+			return (-1);
+		else if (player->pov > M_PI && player->pov < 2 * M_PI)
+			return (1);
+		else
+			return (0);
+	}
+	else
+		return (0);
+}
+
 void	makeimage(t_window_info	*window, t_all_info *all)
 {
 	int dist = WALL_HEI;
@@ -50,15 +74,11 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 	int i = 1;
 	int j;
 	move = 10 / (minimapsize);
-	//printf("move -> %f\n", move);
 	while (i < M_WID + WID - 1)
 	{
 		if (i < M_WID)
 		{
 			j = 0;
-			//minimapx = all->player->xpos + (-(M_HEI / 2) + i) * move * all->player->xcamera;
-			//minimapy = all->player->ypos + (-M_HEI / 2 + i) * move * all->player->ycamera;
-			//printf("minimapx -> %f, floor -> %i\n", minimapx, ft_floor(minimapx));
 			while (j < M_HEI)
 			{
 				minimapx = all->player->xpos - ((M_HEI / 2) - i) * move * all->player->xcamera + ((M_HEI / 2) - j) * move * all->player->xdir;
@@ -91,7 +111,14 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 255;
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
 				}
-				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == '0' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'N' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'E' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'W' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'S')
+				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'D')
+				{
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 102;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 52;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 0;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
+				}
+				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == '0' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'N' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'E' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'W' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'S' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'd')
 				{
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 28;
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 91;
@@ -105,10 +132,6 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 		{
 			j = 0;
 			scale = dist / window->dist[i - M_WID].projy;
-			//printf("%c: %i, %f, %10f, %10f, %10f\n", dist, window->dist[i].wall, window->dist[i].dist,  window->dist[i].projy, window->dist[i].projx, scale);
-			//printf("dist -> %f\n", window->dist[i].projy);
-			//printf("scale -> %f\n", scale);
-			//printf("wall -> %c\n", window->dist[i].wall);
 			while (j < HEI)
 			{
 				if (j < HEI / 2 - scale / 2)//sky
@@ -125,8 +148,6 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = all->info->floor_col[2];
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
 				}
-					//window->g_img->pixels, 255 << 4, window->g_img->width * window->g_img->height * sizeof(int));
-					//mlx_put_pixel(w->mlx, j, i, 255 << 4);
 				else if (j >= HEI / 2 - scale / 2 && j <= HEI / 2 + scale / 2)
 				{
 					if (window->dist[i - M_WID].wall == 'N')
@@ -145,30 +166,98 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 					}
 					else if (window->dist[i- M_WID].wall == 'S')
 					{
-						scale_textur = all->draw->s_wall->height/ scale ;
-						pos = fmod(window->dist[i- M_WID].posx, 1.0);
-						pos = pos * all->draw->s_wall->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->s_wall->bytes_per_pixel)
+						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 2][ft_floor(window->dist[i- M_WID].posx)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == '1'))
 						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->s_wall->pixels[(int)all->draw->s_wall->width * (int)n * (int)all->draw->s_wall->bytes_per_pixel + (int)pos * (int)all->draw->s_wall->bytes_per_pixel + (int)k];
-							k++;
+							if (all->info->doordir == 1)
+							{
+								scale_textur = all->draw->door->height/ scale ;
+								pos = fmod(window->dist[i- M_WID].posx, 1.0);
+								pos = pos * all->draw->door->width;
+								pos = pos - fmod(pos, 1.0);
+								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+								k = 0;
+								while (k < all->draw->door->bytes_per_pixel)
+								{
+									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
+									k++;
+								}								
+							}
+							else
+							{
+								scale_textur = all->draw->door->height/ scale ;
+								pos = fmod( window->dist[i - M_WID].posx, 1.0);
+								pos = (1 - pos) * all->draw->door->width;
+								pos = pos - fmod(pos, 1.0);
+								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+								k = 0;
+								while (k < all->draw->door->bytes_per_pixel)
+								{
+									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
+									k++;
+								}
+							}
+						}
+						else
+						{
+							scale_textur = all->draw->s_wall->height/ scale ;
+							pos = fmod(window->dist[i- M_WID].posx, 1.0);
+							pos = pos * all->draw->s_wall->width;
+							pos = pos - fmod(pos, 1.0);
+							n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+							k = 0;
+							while (k < all->draw->s_wall->bytes_per_pixel)
+							{
+								window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->s_wall->pixels[(int)all->draw->s_wall->width * (int)n * (int)all->draw->s_wall->bytes_per_pixel + (int)pos * (int)all->draw->s_wall->bytes_per_pixel + (int)k];
+								k++;
+							}
 						}
 					}
 					else if (window->dist[i - M_WID].wall == 'E')
 					{
-						scale_textur = all->draw->e_wall->height/ scale ;
-						pos = fmod(window->dist[i - M_WID].posy, 1.0);
-						pos = (1 - pos) * all->draw->e_wall->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->e_wall->bytes_per_pixel)
+						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 2)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == '1'))
 						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->e_wall->pixels[(int)all->draw->e_wall->width * (int)n * (int)all->draw->e_wall->bytes_per_pixel + (int)pos * (int)all->draw->e_wall->bytes_per_pixel + (int)k];
-							k++;
+							if (all->info->doordir == -1)
+							{
+								scale_textur = all->draw->door->height/ scale ;
+								pos = fmod(window->dist[i - M_WID].posy, 1.0);
+								pos = (1 - pos) * all->draw->door->width;
+								pos = pos - fmod(pos, 1.0);
+								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+								k = 0;
+								while (k < all->draw->door->bytes_per_pixel)
+								{
+									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
+									k++;
+								}
+							}
+							else
+							{
+								scale_textur = all->draw->door->height/ scale ;
+								pos = fmod(window->dist[i - M_WID].posy, 1.0);
+								pos = pos * all->draw->door->width;
+								pos = pos - fmod(pos, 1.0);
+								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+								k = 0;
+								while (k < all->draw->door->bytes_per_pixel)
+								{
+									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
+									k++;
+								}
+							}
+						}
+						else
+						{
+							scale_textur = all->draw->e_wall->height/ scale ;
+							pos = fmod(window->dist[i - M_WID].posy, 1.0);
+							pos = (1 - pos) * all->draw->e_wall->width;
+							pos = pos - fmod(pos, 1.0);
+							n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
+							k = 0;
+							while (k < all->draw->e_wall->bytes_per_pixel)
+							{
+								window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->e_wall->pixels[(int)all->draw->e_wall->width * (int)n * (int)all->draw->e_wall->bytes_per_pixel + (int)pos * (int)all->draw->e_wall->bytes_per_pixel + (int)k];
+								k++;
+							}
 						}
 					}
 					else if (window->dist[i - M_WID].wall == 'W')
@@ -182,7 +271,6 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 						while (k < all->draw->w_wall->bytes_per_pixel)
 						{
 							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->w_wall->pixels[(int)all->draw->w_wall->width * (int)n * (int)all->draw->w_wall->bytes_per_pixel + (int)pos * (int)all->draw->w_wall->bytes_per_pixel + (int)k];
-							
 							k++;
 						}
 					}
@@ -211,7 +299,6 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 						while (k < all->draw->door->bytes_per_pixel)
 						{
 							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-							
 							k++;
 						}
 					}
@@ -306,6 +393,40 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 		mlx_close_window(all->window->mlx);
 } */
 
+void	ft_opendoor(t_all_info *all)
+{
+	t_impact	dimpact;
+
+	ft_calculatedist(all->info, all->player, 0, &dimpact);
+	if (dimpact.wall == 'D' && dimpact.dist < 1)
+	{
+		if (all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx)] == 'D')
+		{
+			all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx)] = 'd';
+			all->info->doorx = ft_floor(dimpact.posx);
+			all->info->doory = ft_floor(dimpact.posy);
+			if (dimpact.doorc == 'x')
+				all->info->doordir = ft_dir(all->player, 'x');
+			else if (dimpact.doorc == 'y')
+				all->info->doordir = ft_dir(all->player, 'y');
+		}
+		else if (dimpact.doorc == 'x')
+		{
+			all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx) + ft_dir(all->player, 'x')] = 'd';
+			all->info->doordir = ft_dir(all->player, 'x');
+			all->info->doorx = ft_floor(dimpact.posx) + ft_dir(all->player, 'x');
+			all->info->doory = ft_floor(dimpact.posy);
+		}
+		else if (dimpact.doorc == 'y')
+		{
+			all->info->map[ft_floor(dimpact.posy) + ft_dir(all->player, 'y')][ft_floor(dimpact.posx)] = 'd';
+			all->info->doordir= ft_dir(all->player, 'y');
+			all->info->doorx = ft_floor(dimpact.posx);
+			all->info->doory = ft_floor(dimpact.posy) + ft_dir(all->player, 'y');
+		}
+	}
+}
+
 void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
 {	
 	t_all_info *all;
@@ -349,6 +470,13 @@ void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
 	if (keydata.key == MLX_KEY_LEFT)
 	{
 		rot_player(all->player, 1);
+		ft_angleloop(all->info, all->window, all->player);
+		makeimage(all->window, all);
+		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+	}
+	if (keydata.key == MLX_KEY_O && keydata.action == 1)
+	{
+		ft_opendoor(all);
 		ft_angleloop(all->info, all->window, all->player);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);

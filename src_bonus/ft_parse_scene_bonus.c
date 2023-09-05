@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/04 13:16:51 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/05 08:32:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -404,6 +404,15 @@ void	ft_check_closedmap(t_cub_info *info)
 	ft_freearr(mapdup);
 }
 
+void	ft_checkdoorwalls(int i, int j, t_cub_info *info)
+{
+	if ((info->map[i - 1][j] == '1' && info->map[i + 1][j] == '1')
+		|| (info->map[i][j - 1] == '1' && info->map[i][j + 1] == '1'))
+		return ;
+	else
+		ft_errfreeexit("Doors must be located between two walls.", info);
+}
+
 void	ft_check_door(t_cub_info *info)
 {
 	int i;
@@ -418,7 +427,10 @@ void	ft_check_door(t_cub_info *info)
 		while (info->map[i][j])
 		{
 			if (info->map[i][j] == 'D')
+			{
+				ft_checkdoorwalls(i, j, info);
 				doorcount++;
+			}
 			j++;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/04 13:07:08 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:42:00 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ void	ft_init_info(t_cub_info *info)
 	info->ceil_col[0] = -1;
 	info->ceil_col[1] = -1;
 	info->ceil_col[2] = -1;
+	info->doordir = 0;
+	info->doorx = -1;
+	info->doory = -1;
 }
 
 int	ft_cub3d(char *scenefile)

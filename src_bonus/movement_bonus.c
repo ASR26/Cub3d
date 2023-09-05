@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 11:12:43 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/04 13:37:48 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:01:37 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include "../inc/cub3d_bonus.h"
 
 //double	ft_setang(double ang);
+
+float   ft_dist(t_cub_info *cub, t_player_info *player)
+{
+    float dist;
+    float diffx;
+    float diffy;
+
+    diffx = player->xpos - (cub->doorx + 0.5f);
+    diffy = player->ypos - (cub->doory + 0.5f);
+    dist = sqrt(diffx * diffx + diffy * diffy);
+    return (dist);
+}
 
 void    move_player_front(t_cub_info *cub, t_player_info *player, int i)
 {
@@ -25,6 +37,17 @@ void    move_player_front(t_cub_info *cub, t_player_info *player, int i)
     {
         player->xpos += MOV_SPEED * player->xdir * i;
         player->ypos += MOV_SPEED * player->ydir * i;
+        if (cub->doordir)
+        {
+            if (ft_dist(cub, player) > 1.5)
+            {
+                printf("Did this.\n");
+                cub->map[cub->doory][cub->doorx] = 'D';
+                cub->doordir = 0;
+                cub->doorx = 0;
+                cub->doory = 0;
+            }
+        }
     }
 }
 
@@ -37,6 +60,17 @@ void    move_player_lateral(t_cub_info *cub, t_player_info *player, int i)
     {
         player->xpos += MOV_SPEED * player->xcamera * i;
         player->ypos += MOV_SPEED * player->ycamera * i;
+         if (cub->doordir)
+        {
+            if (ft_dist(cub, player) > 1.5)
+            {
+                printf("Did this2.\n");
+                cub->map[cub->doory][cub->doorx] = 'D';
+                cub->doordir = 0;
+                cub->doorx = 0;
+                cub->doory = 0;
+            }
+        }
     }
 }
 void    move_player(t_cub_info *cub, t_player_info *player, int i)
