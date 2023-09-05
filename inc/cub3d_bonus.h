@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/04 13:33:34 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/05 11:57:49 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,9 @@ typedef struct s_cub_info
 	char	*door;
 	int		floor_col[3];
 	int		ceil_col[3];
+	int 	doordir;
+	int		doorx;
+	int		doory;
 }			t_cub_info;
 
 typedef struct s_player_info
@@ -85,7 +88,6 @@ typedef struct s_impact
 	double	projy;
 	double	deltadist;
 }			t_impact;
-
 
 typedef struct s_window_info
 {
