@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/05 11:57:49 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:49:41 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 
 # include "../libft/libft.h"
 # include "../MLX/include/MLX42/MLX42.h"
-
-# include "yolanthe.h"
-# include "andres.h"
 
 /* close read write */
 # include <unistd.h>
@@ -32,6 +29,10 @@
 /* errno */
 # include <errno.h>
 
+# include <math.h>
+
+# define ROT_SPEED M_PI/36
+# define MOV_SPEED 0.1f
 #define WID 1000
 #define HEI 800
 #define M_WID HEI / 2
@@ -60,9 +61,9 @@ typedef struct s_cub_info
 	char	*door;
 	int		floor_col[3];
 	int		ceil_col[3];
-	int 	doordir;
-	int		doorx;
-	int		doory;
+	int 	doordir[5];
+	int		doorx[5];
+	int		doory[5];
 }			t_cub_info;
 
 typedef struct s_player_info
@@ -71,7 +72,6 @@ typedef struct s_player_info
 	double	ypos;
 	double	xdir;
 	double	ydir;
-	double	zdir;
 	double	pov;
 	double	xcamera;
 	double	ycamera;
@@ -95,7 +95,12 @@ typedef struct s_window_info
 	int			wid;
 	int			hei;
 	mlx_image_t	*g_img;
+	int			lastclickx;
+	int			leftclick;
 	t_impact	dist[WID];
+	int button;
+	int action;
+	int frame;
 }			t_window_info;
 
 typedef struct s_dist
@@ -157,23 +162,25 @@ void	ft_setdistxvar(t_dist *dist, t_player_info *player);
 void	ft_setdistyvar(t_dist *dist, t_player_info *player);
 void	ft_init_impact(t_impact *impact);
 void	ft_init_dist(t_dist *dist, t_player_info *player, double ang);
-void	ft_loopxcrossings(t_cub_info *info, t_player_info *player, t_dist *dist, t_impact *impact);
-void	ft_loopycrossings(t_cub_info *info, t_player_info *player, t_dist *dist, t_impact *impact);
+void	ft_loopxcrossings(t_all_info *all, t_dist *dist, t_impact *impact);
+void	ft_loopycrossings(t_all_info *all, t_dist *dist, t_impact *impact);
 void	ft_copy_impact(t_impact *copy, t_impact src);
-void 	ft_calculatedist(t_cub_info *info, t_player_info *player, double ang, t_impact *impact);
+void 	ft_calculatedist(t_all_info *all, double ang, t_impact *impact);
 double	ft_calculate_deltaang(int i);
-void	ft_angleloop(t_cub_info *info, t_window_info *window, t_player_info *player);
+void	ft_angleloop(t_all_info	*all);
 
 /* ------------------------------- errorfunc.c ------------------------------ */
 
 void	ft_errexit(char *errormessage);
 void	ft_errfreeexit(char *errormessage, t_cub_info *info);
+void	ft_errfreeexit2(char *errormessage, t_cub_info *info, t_draw *draw);
 
 /* ------------------------------ ft_freefunc.c ----------------------------- */
 
 void	ft_freearr(char **arr);
 void	ft_freearr2(char **arr, char **newarr);
 void	ft_free_info(t_cub_info *info);
+void	ft_free_draw(t_draw *draw);
 
 /* ------------------------------- ft_getstr.c ------------------------------ */
 
@@ -221,6 +228,7 @@ void	ft_set_player(t_player_info *player, t_cub_info *info);
 
 /* --------------------------------- game.c --------------------------------- */
 
+int		ft_floor(float pos);
 void	ft_game(t_cub_info *info, t_player_info *player);
 
 /* -------------------------------- matrix.c -------------------------------- */
@@ -233,6 +241,7 @@ void    move_player_front(t_cub_info *cub, t_player_info *player, int i);
 void    move_player_lateral(t_cub_info *cub, t_player_info *player, int i);
 void    move_player(t_cub_info *cub, t_player_info *player, int i);
 void    rot_player(t_player_info *player, int i);
+void    rot_player_mouse(t_player_info *player, int i, float vel);
 
 /* ----------------------------- parse_scene1.c ----------------------------- */
 
@@ -245,7 +254,7 @@ char	*ft_strjoinfree(char *begin, char *end, int num);
 
 /* ------------------------------- textures.c ------------------------------- */
 
-void	ft_setdraw(t_draw *draw, t_cub_info *cub, mlx_t *mlx);
-int		ft_checkdraw(t_draw draw, t_cub_info *cub);
+void	ft_setdraw(t_draw *draw, t_cub_info *cub);
+void	ft_checkdraw(t_draw *draw, t_cub_info *cub);
 
 #endif
