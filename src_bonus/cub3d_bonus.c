@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/05 11:42:00 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:30:17 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,15 @@
 // void	ft_init_info(t_cub_info *info);
 // void    ft_set_player(t_player_info *player, t_cub_info *info);
 
+void ft_leaks(void)
+{
+	system("leaks -q cub3d_bonus");
+}
+
 void	ft_init_info(t_cub_info *info)
 {
+	int	i;
+
 	info->scene = NULL;
 	info->map = NULL;
 	info->n_wall = NULL;
@@ -39,9 +46,14 @@ void	ft_init_info(t_cub_info *info)
 	info->ceil_col[0] = -1;
 	info->ceil_col[1] = -1;
 	info->ceil_col[2] = -1;
-	info->doordir = 0;
-	info->doorx = -1;
-	info->doory = -1;
+	i = 0;
+	while (i < 5)
+	{
+		info->doordir[i] = 0;
+		info->doorx[i] = -1;
+		info->doory[i] = -1;
+		i++;
+	}
 }
 
 int	ft_cub3d(char *scenefile)
@@ -49,27 +61,11 @@ int	ft_cub3d(char *scenefile)
 	t_cub_info		info;
 	t_player_info	player;
 
+	//atexit(ft_leaks);
 	ft_init_info(&info);
 	ft_parse_scene(scenefile, &info);
 	ft_set_player(&player, &info);
-	// printf("player x-> %f\n", player.xpos);
-	// printf("player y-> %f\n", player.ypos);
-	// printf("player rotx-> %f\n", player.xdir);
-	// printf("player roty-> %f\n", player.ydir);
-	// printf("player camx-> %f\n", player.xcamera);
-	// printf("player camy-> %f\n", player.ycamera);
-	// printf("player pov-> %f\n", player.pov);
-	// rot_player(&player, 1);
-	// int i = 0;
-	// while (i < 20)
-	// {
-	// 	move_player(&info, &player, 'S');
-	// 	i++;
-	// }
-	// printf("player newopsx-> %f\n", player.xpos);
-	// printf("player newposy-> %f\n", player.ypos);
 	ft_game(&info, &player);
-	printf("Got to the end.\n");//remove this later
 	ft_free_info(&info);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:51:40 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/01 09:53:50 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/06 09:32:54 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,20 @@ void	ft_free_info(t_cub_info *info)
 		free(info->w_wall);
 	if (info->e_wall)
 		free(info->e_wall);
+	if (info->door)
+		free(info->door);
+}
+
+void	ft_free_draw(t_draw *draw)
+{
+	if (draw->n_wall)
+		mlx_delete_texture(draw->n_wall);
+	if (draw->s_wall)
+		mlx_delete_texture(draw->s_wall);
+	if (draw->e_wall)
+		mlx_delete_texture(draw->e_wall);
+	if (draw->w_wall)
+		mlx_delete_texture(draw->w_wall);
+	if (draw->door)
+		mlx_delete_texture(draw->door);
 }

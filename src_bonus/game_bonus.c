@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:55:36 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/05 12:04:26 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/06 13:51:07 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ void	ft_initwindow(t_window_info	*window)
 {
 	window->wid = WID + M_WID;
 	window->hei = HEI;
+	window->lastclickx = -1;
+	window->leftclick = 0;
+	window->action = 0;
+	window->button = -1;
+	window->frame = 0;
 	window->mlx = mlx_init(window->wid, window->hei, "cub3d", true);
 }
 
@@ -58,6 +63,22 @@ int	ft_dir(t_player_info *player, char c)
 		return (0);
 }
 
+int ft_finddooridx(t_all_info *all, int i, char dir)
+{
+	int id;
+
+	id = 0;
+	while (id < 5)
+	{
+		if (dir == 'S' && ((ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id]) || (ft_floor(all->window->dist[i- M_WID].posy) + 1 == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id])))
+			return (id);
+		else if (dir == 'E' && ((ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id]) || (ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) + 1 == all->info->doorx[id])))
+			return (id);
+		id++;
+	}
+	return (id);
+}
+
 void	makeimage(t_window_info	*window, t_all_info *all)
 {
 	int dist = WALL_HEI;
@@ -70,6 +91,7 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 	float minimapx;
 	float minimapy;
 	float minimapsize = M_HEI;
+	int		dooridx;
 
 	int i = 1;
 	int j;
@@ -106,9 +128,9 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 				}
 				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == '1')
 				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 255;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 255;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 255;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 2;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 48;
+					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 32;
 					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
 				}
 				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'D')
@@ -168,7 +190,8 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 					{
 						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 2][ft_floor(window->dist[i- M_WID].posx)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == '1'))
 						{
-							if (all->info->doordir == 1)
+							dooridx = ft_finddooridx(all, i, window->dist[i- M_WID].wall);
+							if (all->info->doordir[dooridx] == 1)
 							{
 								scale_textur = all->draw->door->height/ scale ;
 								pos = fmod(window->dist[i- M_WID].posx, 1.0);
@@ -216,7 +239,8 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 					{
 						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 2)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == '1'))
 						{
-							if (all->info->doordir == -1)
+							dooridx = ft_finddooridx(all, i, window->dist[i- M_WID].wall);
+							if (all->info->doordir[dooridx] == -1)
 							{
 								scale_textur = all->draw->door->height/ scale ;
 								pos = fmod(window->dist[i - M_WID].posy, 1.0);
@@ -396,33 +420,37 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 void	ft_opendoor(t_all_info *all)
 {
 	t_impact	dimpact;
+	int			idx;
 
-	ft_calculatedist(all->info, all->player, 0, &dimpact);
+	ft_calculatedist(all, 0, &dimpact);
 	if (dimpact.wall == 'D' && dimpact.dist < 1)
 	{
+		idx = 0;
+		while (all->info->doordir[idx] && idx < 5)
+			idx++;
 		if (all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx)] == 'D')
 		{
 			all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx)] = 'd';
-			all->info->doorx = ft_floor(dimpact.posx);
-			all->info->doory = ft_floor(dimpact.posy);
+			all->info->doorx[idx] = ft_floor(dimpact.posx);
+			all->info->doory[idx] = ft_floor(dimpact.posy);
 			if (dimpact.doorc == 'x')
-				all->info->doordir = ft_dir(all->player, 'x');
+				all->info->doordir[idx] = ft_dir(all->player, 'x');
 			else if (dimpact.doorc == 'y')
-				all->info->doordir = ft_dir(all->player, 'y');
+				all->info->doordir[idx] = ft_dir(all->player, 'y');
 		}
 		else if (dimpact.doorc == 'x')
 		{
 			all->info->map[ft_floor(dimpact.posy)][ft_floor(dimpact.posx) + ft_dir(all->player, 'x')] = 'd';
-			all->info->doordir = ft_dir(all->player, 'x');
-			all->info->doorx = ft_floor(dimpact.posx) + ft_dir(all->player, 'x');
-			all->info->doory = ft_floor(dimpact.posy);
+			all->info->doordir[idx] = ft_dir(all->player, 'x');
+			all->info->doorx[idx] = ft_floor(dimpact.posx) + ft_dir(all->player, 'x');
+			all->info->doory[idx] = ft_floor(dimpact.posy);
 		}
 		else if (dimpact.doorc == 'y')
 		{
 			all->info->map[ft_floor(dimpact.posy) + ft_dir(all->player, 'y')][ft_floor(dimpact.posx)] = 'd';
-			all->info->doordir= ft_dir(all->player, 'y');
-			all->info->doorx = ft_floor(dimpact.posx);
-			all->info->doory = ft_floor(dimpact.posy) + ft_dir(all->player, 'y');
+			all->info->doordir[idx] = ft_dir(all->player, 'y');
+			all->info->doorx[idx] = ft_floor(dimpact.posx);
+			all->info->doory[idx] = ft_floor(dimpact.posy) + ft_dir(all->player, 'y');
 		}
 	}
 }
@@ -435,54 +463,123 @@ void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
 	if (keydata.key == MLX_KEY_W)
 	{
 		move_player_front(all->info, all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_S)
 	{
 		move_player_front(all->info, all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_A)
 	{
 		move_player_lateral(all->info, all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_D)
 	{
 		move_player_lateral(all->info, all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_RIGHT)
 	{
 		rot_player(all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_LEFT)
 	{
 		rot_player(all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_O && keydata.action == 1)
 	{
 		ft_opendoor(all);
-		ft_angleloop(all->info, all->window, all->player);
+		ft_angleloop(all);
 		makeimage(all->window, all);
 		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
 	}
 	if (keydata.key == MLX_KEY_ESCAPE)
 		mlx_close_window(all->window->mlx);
+}
+
+void ft_mlx_cursorfunc(double x, double y, void* param)
+{
+	t_all_info *all;
+	int i;
+
+	all = param;
+	if (x > all->window->wid || x < 0 || y > all->window->hei || y < 0 || all->window->action == 0)
+	{
+		all->window->lastclickx = -1;
+		return ;
+	}
+	else
+	{
+		if (all->window->lastclickx == -1)
+		{
+			all->window->lastclickx = x;
+			return ;
+		}
+		else
+		{
+			rot_player_mouse(all->player, -1, (all->window->lastclickx - x) * M_PI / 1000);
+			ft_angleloop(all);
+			all->window->lastclickx = x;
+			makeimage(all->window, all);
+			mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		}
+	}
+}
+
+void ft_mlx_mousefunc(mouse_key_t button, action_t action, modifier_key_t mods, void* param)
+{
+	t_all_info *all;
+	int32_t y;
+
+	all = param;
+	all->window->button = button;
+	all->window->action = action;
+	if (button == 0)
+	{
+		if (action == 1)
+		{
+			mlx_get_mouse_pos(all->window->mlx, &(all->window->lastclickx), &y);
+			if (all->window->lastclickx < M_WID)
+				return ;
+			if (all->window->lastclickx < WID / 2 + M_WID)
+			{
+				rot_player(all->player, 1);
+				ft_angleloop(all);
+				makeimage(all->window, all);
+				mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+			}
+			else
+			{
+				rot_player(all->player, -1);
+				ft_angleloop(all);
+				makeimage(all->window, all);
+				mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+			}
+		}
+	}
+	else if (button == 1 && action == 1)
+	{
+		if (mlx_is_mouse_down(all->window->mlx, button))
+		{
+			mlx_cursor_hook(all->window->mlx, &ft_mlx_cursorfunc, all);
+		}
+	}
 }
 
 void ft_hook(void *arg)
@@ -491,6 +588,9 @@ void ft_hook(void *arg)
 
 	all = arg;
 	mlx_key_hook(all->window->mlx, &ft_mlx_keyfunc, all);
+	if (all->window->frame % 5 == 0)
+		mlx_mouse_hook(all->window->mlx, &ft_mlx_mousefunc, all);
+	all->window->frame++;
 }
 
 void	ft_game(t_cub_info *info, t_player_info *player)
@@ -501,20 +601,25 @@ void	ft_game(t_cub_info *info, t_player_info *player)
 	t_draw			draw;
 
 	(void) info;
+	ft_setdraw(&draw, info);
 	ft_initwindow(&window);
 	all.window = &window;
 	all.info = info;
 	all.player = player;
 	all.draw = &draw;
 	//all.player = &player;
-	ft_setdraw(&draw, info, window.mlx);
 	window.g_img = mlx_new_image(window.mlx, window.wid, window.hei);
 	//printf("PLAYER: xpos -> %f, ypos -> %f, angle -> %f\n", player->xpos, player->ypos, player->pov);
 	//printf("PLAYER: xpos -> %f, ypos -> %f, angle -> %f\n", player->xpos, player->ypos, player->pov);
-	ft_angleloop(info, &window, player);
+	ft_angleloop(&all);
 	makeimage(&window, &all);
 	mlx_image_to_window(window.mlx, window.g_img, 0, 0);
 	mlx_loop_hook(window.mlx, &ft_hook, &all);
 	mlx_loop(window.mlx);
 	mlx_terminate(window.mlx);
+	mlx_delete_texture(all.draw->n_wall);
+	mlx_delete_texture(all.draw->s_wall);
+	mlx_delete_texture(all.draw->e_wall);
+	mlx_delete_texture(all.draw->w_wall);
+	mlx_delete_texture(all.draw->door);
 }

@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 15:48:50 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/01 09:53:44 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/06 09:34:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,12 @@ void	ft_errexit(char *errormessage)
 void	ft_errfreeexit(char *errormessage, t_cub_info *info)
 {
 	ft_free_info(info);
+	ft_errexit(errormessage);
+}
+
+void	ft_errfreeexit2(char *errormessage, t_cub_info *info, t_draw *draw)
+{
+	ft_free_info(info);
+	ft_free_draw(draw);
 	ft_errexit(errormessage);
 }
