@@ -6,12 +6,12 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/06 13:49:41 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/11 09:08:51 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CUB3D_H
-# define CUB3D_H 
+#ifndef CUB3D_BONUS_H
+# define CUB3D_BONUS_H 
 
 # include "../libft/libft.h"
 # include "../MLX/include/MLX42/MLX42.h"
@@ -33,11 +33,22 @@
 
 # define ROT_SPEED M_PI/36
 # define MOV_SPEED 0.1f
-#define WID 1000
-#define HEI 800
-#define M_WID HEI / 2
-#define M_HEI HEI / 2
-#define WALL_HEI 600
+# define WID 1000
+# define HEI 800
+# define M_WID HEI / 5
+# define M_HEI HEI / 5
+# define W_WID 350
+# define W_HEI 350
+# define T_WID 275
+# define T_HEI 275
+# define WALL_HEI 600
+
+typedef struct s_minimapit
+{
+	int		minimapx_f;
+	int		minimapy_f;
+	float	minimapsize;
+}			t_minimapit;
 
 typedef struct s_draw
 {
@@ -46,6 +57,10 @@ typedef struct s_draw
 	mlx_texture_t	*w_wall;
 	mlx_texture_t	*e_wall;
 	mlx_texture_t	*door;
+	mlx_texture_t	*weapon;
+	mlx_texture_t	*weapon_mv[10];
+	mlx_texture_t	*treasurec;
+	mlx_texture_t	*treasureo;
 }			        t_draw;
 
 typedef struct s_cub_info
@@ -77,17 +92,26 @@ typedef struct s_player_info
 	double	ycamera;
 }			t_player_info;
 
+typedef struct s_impact_tc
+{
+	int		tc;
+	char	tcside;
+	double	posx;
+	double	posy;
+}			t_impact_tc;
+
 typedef struct s_impact
 {
-	double	dist; //dist from player to first impact with wall 
-	char	wall;
-	char	doorc;
-	double	posx; //x pos of player plus ray of distance dist (should be x pos of impact eventually)
-	double	posy; //y pos of player plus ray of distance dist (should be y pos of impact eventually)
-	double	projx;
-	double	projy;
-	double	deltadist;
-}			t_impact;
+	double		dist; //dist from player to first impact with wall 
+	char		wall;
+	char		doorc;
+	double		posx; //x pos of player plus ray of distance dist (should be x pos of impact eventually)
+	double		posy; //y pos of player plus ray of distance dist (should be y pos of impact eventually)
+	double		projx;
+	double		projy;
+	double		deltadist;
+	t_impact_tc	*tc;
+}				t_impact;
 
 typedef struct s_window_info
 {
@@ -95,12 +119,21 @@ typedef struct s_window_info
 	int			wid;
 	int			hei;
 	mlx_image_t	*g_img;
+	mlx_image_t	*g_img_mm;
+	mlx_image_t	*g_img_w;
+	mlx_image_t	*g_img_tc;
+	mlx_image_t	*g_img_to;
+	mlx_image_t *g_img_wmv[10];
+	mlx_image_t	*menustr[8];
 	int			lastclickx;
 	int			leftclick;
 	t_impact	dist[WID];
 	int button;
 	int action;
 	int frame;
+	int menu;
+	int	attack;
+	int	attackbegin;
 }			t_window_info;
 
 typedef struct s_dist
