@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/06 13:50:31 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/11 09:10:39 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ void	ft_init_impact(t_impact *impact)
 	impact->doorc = 0;
 	impact->posx = -1;
 	impact->posy = -1;
+	impact->tc = NULL;
 }
 
 void	ft_init_dist(t_dist *dist, t_player_info *player, double ang)
@@ -240,6 +241,7 @@ void 	ft_calculatedist(t_all_info *all, double ang, t_impact *impact)
 	ft_init_impact(&impactx);
 	ft_init_impact(&impacty);
 	ft_init_dist(&dist, all->player, ang);
+	ft_impact_treasure(all, &dist, &impactx, &impacty);
 	if (dist.distx >= 0)
 		ft_loopxcrossings(all, &dist, &impactx);
 	if (dist.disty >= 0)

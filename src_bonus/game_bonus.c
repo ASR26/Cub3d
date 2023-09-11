@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:55:36 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/06 13:51:07 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/11 09:02:54 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,22 @@
 
 void	ft_initwindow(t_window_info	*window)
 {
-	window->wid = WID + M_WID;
+	window->wid = WID;
 	window->hei = HEI;
 	window->lastclickx = -1;
 	window->leftclick = 0;
 	window->action = 0;
 	window->button = -1;
 	window->frame = 0;
+	window->menu = 0;
+	window->attack = 0;
+	window->attack = 0;
 	window->mlx = mlx_init(window->wid, window->hei, "cub3d", true);
 }
 
-int ft_floor(float pos)
+int	ft_floor(float pos)
 {
-	return ((int) (pos - fmod(pos, 1.0)));
+	return ((int)(pos - fmod(pos, 1.0)));
 }
 
 int	ft_dir(t_player_info *player, char c)
@@ -63,269 +66,271 @@ int	ft_dir(t_player_info *player, char c)
 		return (0);
 }
 
-int ft_finddooridx(t_all_info *all, int i, char dir)
+int	ft_finddooridx(t_all_info *all, int i, char dir)
 {
-	int id;
+	int	k;
 
-	id = 0;
-	while (id < 5)
+	k = 0;
+	while (k < 5)
 	{
-		if (dir == 'S' && ((ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id]) || (ft_floor(all->window->dist[i- M_WID].posy) + 1 == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id])))
-			return (id);
-		else if (dir == 'E' && ((ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) == all->info->doorx[id]) || (ft_floor(all->window->dist[i- M_WID].posy) == all->info->doory[id] && ft_floor(all->window->dist[i- M_WID].posx) + 1 == all->info->doorx[id])))
-			return (id);
-		id++;
+		if (dir == 'S' && \
+		((ft_floor(all->window->dist[i - M_WID].posy) == all->info->doory[k] && \
+		ft_floor(all->window->dist[i - M_WID].posx) == all->info->doorx[k]) || \
+		(ft_floor(all->window->dist[i - M_WID].posy) + 1 == all->info->doory[k] \
+		&& ft_floor(all->window->dist[i - M_WID].posx) == all->info->doorx[k])))
+			return (k);
+		else if (dir == 'E' && \
+		((ft_floor(all->window->dist[i - M_WID].posy) == all->info->doory[k] && \
+		ft_floor(all->window->dist[i - M_WID].posx) == all->info->doorx[k]) || \
+		(ft_floor(all->window->dist[i - M_WID].posx) + 1 == all->info->doorx[k] \
+		&& ft_floor(all->window->dist[i - M_WID].posy) == all->info->doory[k])))
+			return (k);
+		k++;
 	}
-	return (id);
+	return (k);
+}
+
+void	ft_put_pixel_color_mm(t_all_info *all, int i, int j, int color)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	r = color >> 16;
+	g = (color << 8) >> 16;
+	b = (color << 16) >> 16;
+	all->window->g_img_mm->pixels[M_WID * j * 4 + i * 4 + 0] = r;
+	all->window->g_img_mm->pixels[M_WID * j * 4 + i * 4 + 1] = g;
+	all->window->g_img_mm->pixels[M_WID * j * 4 + i * 4 + 2] = b;
+	all->window->g_img_mm->pixels[M_WID * j * 4 + i * 4 + 3] = 255;
+}
+
+void	make_image_minimap_iter(t_all_info *all, int i, int j, t_minimapit mm)
+{
+	if ((i >= M_HEI / 2 - 2 && i <= M_HEI / 2 + 3) && (j >= M_HEI / 2 - 2 \
+	&& j <= M_HEI / 2 + 3))
+		ft_put_pixel_color_mm(all, i, j, (255 << 16) + (0 << 8) + (0));
+	else if ((mm.minimapx_f < 0 || mm.minimapx_f >= all->info->wid) || \
+	(mm.minimapy_f < 0 || mm.minimapy_f >= all->info->hei) || \
+	(all->info->map[(int)mm.minimapy_f][(int)mm.minimapx_f] == ' '))
+		ft_put_pixel_color_mm(all, i, j, (0 << 16) + (0 << 8) + (0));
+	else if (all->info->map[mm.minimapy_f][mm.minimapx_f] == '1')
+		ft_put_pixel_color_mm(all, i, j, (2 << 16) + (48 << 8) + (32));
+	else if (all->info->map[mm.minimapy_f][mm.minimapx_f] == 'D')
+		ft_put_pixel_color_mm(all, i, j, (102 << 16) + (52 << 8) + (0));
+	else if (all->info->map[mm.minimapy_f][mm.minimapx_f] == '0' || \
+	all->info->map[mm.minimapy_f][mm.minimapx_f] == 'N' || \
+	all->info->map[mm.minimapy_f][mm.minimapx_f] == 'E' || \
+	all->info->map[mm.minimapy_f][mm.minimapx_f] == 'W' || \
+	all->info->map[mm.minimapy_f][mm.minimapx_f] == 'S' || \
+	all->info->map[mm.minimapy_f][mm.minimapx_f] == 'd')
+		ft_put_pixel_color_mm(all, i, j, (28 << 16) + (91 << 8) + (5));
+	else if (all->info->map[mm.minimapy_f][mm.minimapx_f] == 'c')
+		ft_put_pixel_color_mm(all, i, j, (184 << 16) + (134 << 8) + (11));
+}
+
+void	make_image_minimap(t_all_info *all, int i)
+{
+	int			j;
+	t_minimapit	mm;
+	float		move;
+
+	j = 0;
+	mm.minimapsize = M_HEI;
+	move = 10 / (mm.minimapsize);
+	while (j < M_HEI)
+	{
+		mm.minimapx_f = ft_floor(all->player->xpos \
+		- ((M_HEI / 2) - i) * move * all->player->xcamera \
+		+ ((M_HEI / 2) - j) * move * all->player->xdir);
+		mm.minimapy_f = ft_floor(all->player->ypos \
+		- (M_HEI / 2 - i) * move * all->player->ycamera \
+		+ (M_HEI / 2 - j) * move * all->player->ydir);
+		make_image_minimap_iter(all, i, j, mm);
+		j++;
+	}
+}
+
+void	ft_put_pixel_color(t_all_info *all, int i, int j, char c)
+{
+	int	r;
+	int	g;
+	int	b;
+
+	if (c == 'c')
+	{
+		r = all->info->ceil_col[0];
+		g = all->info->ceil_col[1];
+		b = all->info->ceil_col[2];
+	}
+	if (c == 'f')
+	{
+		r = all->info->floor_col[0];
+		g = all->info->floor_col[1];
+		b = all->info->floor_col[2];
+	}
+	all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + 0] = r;
+	all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + 1] = g;
+	all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + 2] = b;
+	all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + 3] = 255;
+}
+
+void	ft_put_texturex(t_all_info *all, int i, int j, mlx_texture_t *texture)
+{
+	float	scale;
+	float	pos;
+	float	scale_textur;
+	int		n;
+	int		k;
+
+	scale = WALL_HEI / all->window->dist[i - M_WID].projy;
+	scale_textur = texture->height / scale ;
+	pos = fmod(all->window->dist[i - M_WID].posx, 1.0);
+	pos = pos * texture->width;
+	pos = pos - fmod(pos, 1.0);
+	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
+	k = 0;
+	while (k < texture->bytes_per_pixel)
+	{
+		all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + k] = \
+		texture->pixels[texture->width * n * texture->bytes_per_pixel \
+		+ (int)pos * texture->bytes_per_pixel + k];
+		k++;
+	}
+}
+
+void	ft_put_texturey(t_all_info *all, int i, int j, mlx_texture_t *texture)
+{
+	float	scale;
+	float	pos;
+	float	scale_textur;
+	int		n;
+	int		k;
+
+	scale = WALL_HEI / all->window->dist[i - M_WID].projy;
+	scale_textur = texture->height / scale ;
+	pos = fmod(all->window->dist[i - M_WID].posy, 1.0);
+	pos = pos * texture->width;
+	pos = pos - fmod(pos, 1.0);
+	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
+	k = 0;
+	while (k < texture->bytes_per_pixel)
+	{
+		all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + k] = \
+		texture->pixels[texture->width * n * texture->bytes_per_pixel \
+		+ (int)pos * texture->bytes_per_pixel + k];
+		k++;
+	}
+}
+
+void	ft_puttexturemirx(t_all_info *all, int i, int j, mlx_texture_t *texture)
+{
+	float	scale;
+	float	pos;
+	float	scale_textur;
+	int		n;
+	int		k;
+
+	scale = WALL_HEI / all->window->dist[i - M_WID].projy;
+	scale_textur = texture->height / scale;
+	pos = fmod(all->window->dist[i - M_WID].posx, 1.0);
+	pos = (1 - pos) * texture->width;
+	pos = pos - fmod(pos, 1.0);
+	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
+	k = 0;
+	while (k < texture->bytes_per_pixel)
+	{
+		all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + k] = \
+		texture->pixels[texture->width * n * texture->bytes_per_pixel \
+		+ (int)pos * texture->bytes_per_pixel + k];
+		k++;
+	}
+}
+
+void	ft_puttexturemiry(t_all_info *all, int i, int j, mlx_texture_t *texture)
+{
+	float	scale;
+	float	pos;
+	float	scale_textur;
+	int		n;
+	int		k;
+
+	scale = WALL_HEI / all->window->dist[i - M_WID].projy;
+	scale_textur = texture->height / scale;
+	pos = fmod(all->window->dist[i - M_WID].posy, 1.0);
+	pos = (1 - pos) * texture->width;
+	pos = pos - fmod(pos, 1.0);
+	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
+	k = 0;
+	while (k < texture->bytes_per_pixel)
+	{
+		all->window->g_img->pixels[WID * j * 4 + (i - M_WID) * 4 + k] = \
+		texture->pixels[texture->width * n * texture->bytes_per_pixel \
+		+ (int)pos * texture->bytes_per_pixel + k];
+		k++;
+	}
 }
 
 void	makeimage(t_window_info	*window, t_all_info *all)
 {
-	int dist = WALL_HEI;
-	float scale;
-	float scale_textur;
-	float pos;
-	int n;
-	int k;
-	float move;
-	float minimapx;
-	float minimapy;
-	float minimapsize = M_HEI;
+	int		dist;
+	float	scale;
 	int		dooridx;
+	int		i;
+	int		j;
 
-	int i = 1;
-	int j;
-	move = 10 / (minimapsize);
+	dist = WALL_HEI;
+	i = 1;
 	while (i < M_WID + WID - 1)
 	{
 		if (i < M_WID)
-		{
-			j = 0;
-			while (j < M_HEI)
-			{
-				minimapx = all->player->xpos - ((M_HEI / 2) - i) * move * all->player->xcamera + ((M_HEI / 2) - j) * move * all->player->xdir;
-				minimapy = all->player->ypos - (M_HEI / 2 - i) * move * all->player->ycamera + (M_HEI / 2 - j) * move * all->player->ydir;
-				if ((i >= M_HEI / 2 - 4 && i <= M_HEI / 2 + 5) && (j >= M_HEI / 2 - 4 && j <= M_HEI / 2 + 5))
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 255;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if ((ft_floor(minimapx) < 0 || ft_floor(minimapx) >= all->info->wid) || (ft_floor(minimapy) < 0 || ft_floor(minimapy) >= all->info->hei))
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == ' ')
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == '1')
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 2;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 48;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 32;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'D')
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 102;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 52;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 0;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == '0' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'N' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'E' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'W' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'S' || all->info->map[(int)ft_floor(minimapy)][(int)ft_floor(minimapx)] == 'd')
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = 28;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = 91;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = 5;
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				j++;
-			}
-		}
+			make_image_minimap(all, i);
 		else
 		{
 			j = 0;
 			scale = dist / window->dist[i - M_WID].projy;
 			while (j < HEI)
 			{
-				if (j < HEI / 2 - scale / 2)//sky
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = all->info->ceil_col[0];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = all->info->ceil_col[1];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = all->info->ceil_col[2];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (j > HEI / 2 + scale / 2)//floor
-				{
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 0] = all->info->floor_col[0];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 1] = all->info->floor_col[1];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 2] = all->info->floor_col[2];
-					window->g_img->pixels[window->wid * j * 4 + i * 4 + 3] = 255;
-				}
+				if (j <= HEI / 2 - scale / 2)
+					ft_put_pixel_color(all, i, j, 'c');
+				else if (j >= HEI / 2 + scale / 2)
+					ft_put_pixel_color(all, i, j, 'f');
 				else if (j >= HEI / 2 - scale / 2 && j <= HEI / 2 + scale / 2)
 				{
 					if (window->dist[i - M_WID].wall == 'N')
-					{
-						scale_textur = all->draw->n_wall->height/ scale ;
-						pos = fmod( window->dist[i - M_WID].posx, 1.0);
-						pos = (1 - pos) * all->draw->n_wall->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->n_wall->bytes_per_pixel)
-						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->n_wall->pixels[(int)all->draw->n_wall->width * (int)n * (int)all->draw->n_wall->bytes_per_pixel + (int)pos * (int)all->draw->n_wall->bytes_per_pixel + (int)k];
-							k++;
-						}
-					}
+						ft_puttexturemirx(all, i, j, all->draw->n_wall);
 					else if (window->dist[i- M_WID].wall == 'S')
 					{
-						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 2][ft_floor(window->dist[i- M_WID].posx)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy) + 1][ft_floor(window->dist[i- M_WID].posx)] == '1'))
+						if ((all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i - M_WID].posy) + 1][ft_floor(window->dist[i - M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i - M_WID].posy) + 2][ft_floor(window->dist[i - M_WID].posx)] == '1') || (all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i - M_WID].posy) + 1][ft_floor(window->dist[i - M_WID].posx)] == '1'))
 						{
 							dooridx = ft_finddooridx(all, i, window->dist[i- M_WID].wall);
 							if (all->info->doordir[dooridx] == 1)
-							{
-								scale_textur = all->draw->door->height/ scale ;
-								pos = fmod(window->dist[i- M_WID].posx, 1.0);
-								pos = pos * all->draw->door->width;
-								pos = pos - fmod(pos, 1.0);
-								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-								k = 0;
-								while (k < all->draw->door->bytes_per_pixel)
-								{
-									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-									k++;
-								}								
-							}
+								ft_put_texturex(all, i, j, all->draw->door);
 							else
-							{
-								scale_textur = all->draw->door->height/ scale ;
-								pos = fmod( window->dist[i - M_WID].posx, 1.0);
-								pos = (1 - pos) * all->draw->door->width;
-								pos = pos - fmod(pos, 1.0);
-								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-								k = 0;
-								while (k < all->draw->door->bytes_per_pixel)
-								{
-									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-									k++;
-								}
-							}
+								ft_puttexturemirx(all, i, j, all->draw->door);
 						}
 						else
-						{
-							scale_textur = all->draw->s_wall->height/ scale ;
-							pos = fmod(window->dist[i- M_WID].posx, 1.0);
-							pos = pos * all->draw->s_wall->width;
-							pos = pos - fmod(pos, 1.0);
-							n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-							k = 0;
-							while (k < all->draw->s_wall->bytes_per_pixel)
-							{
-								window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->s_wall->pixels[(int)all->draw->s_wall->width * (int)n * (int)all->draw->s_wall->bytes_per_pixel + (int)pos * (int)all->draw->s_wall->bytes_per_pixel + (int)k];
-								k++;
-							}
-						}
+							ft_put_texturex(all, i, j, all->draw->s_wall);
 					}
 					else if (window->dist[i - M_WID].wall == 'E')
 					{
-						if ((all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 2)] == '1') || (all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i- M_WID].posy)][ft_floor(window->dist[i- M_WID].posx + 1)] == '1'))
+						if ((all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx)] == '1' && all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx + 1)] == 'd' && all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx + 2)] == '1') || (all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx)] == 'd' && all->info->map[ft_floor(window->dist[i - M_WID].posy)][ft_floor(window->dist[i - M_WID].posx + 1)] == '1'))
 						{
 							dooridx = ft_finddooridx(all, i, window->dist[i- M_WID].wall);
 							if (all->info->doordir[dooridx] == -1)
-							{
-								scale_textur = all->draw->door->height/ scale ;
-								pos = fmod(window->dist[i - M_WID].posy, 1.0);
-								pos = (1 - pos) * all->draw->door->width;
-								pos = pos - fmod(pos, 1.0);
-								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-								k = 0;
-								while (k < all->draw->door->bytes_per_pixel)
-								{
-									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-									k++;
-								}
-							}
+								ft_puttexturemiry(all, i, j, all->draw->door);
 							else
-							{
-								scale_textur = all->draw->door->height/ scale ;
-								pos = fmod(window->dist[i - M_WID].posy, 1.0);
-								pos = pos * all->draw->door->width;
-								pos = pos - fmod(pos, 1.0);
-								n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-								k = 0;
-								while (k < all->draw->door->bytes_per_pixel)
-								{
-									window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-									k++;
-								}
-							}
+								ft_put_texturey(all, i, j, all->draw->door);
 						}
 						else
-						{
-							scale_textur = all->draw->e_wall->height/ scale ;
-							pos = fmod(window->dist[i - M_WID].posy, 1.0);
-							pos = (1 - pos) * all->draw->e_wall->width;
-							pos = pos - fmod(pos, 1.0);
-							n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-							k = 0;
-							while (k < all->draw->e_wall->bytes_per_pixel)
-							{
-								window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->e_wall->pixels[(int)all->draw->e_wall->width * (int)n * (int)all->draw->e_wall->bytes_per_pixel + (int)pos * (int)all->draw->e_wall->bytes_per_pixel + (int)k];
-								k++;
-							}
-						}
+							ft_puttexturemiry(all, i, j, all->draw->e_wall);
 					}
 					else if (window->dist[i - M_WID].wall == 'W')
-					{
-						scale_textur = all->draw->w_wall->height/ scale ;
-						pos = fmod(window->dist[i - M_WID].posy, 1.0);
-						pos = pos * all->draw->w_wall->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->w_wall->bytes_per_pixel)
-						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->w_wall->pixels[(int)all->draw->w_wall->width * (int)n * (int)all->draw->w_wall->bytes_per_pixel + (int)pos * (int)all->draw->w_wall->bytes_per_pixel + (int)k];
-							k++;
-						}
-					}
-					else if (window->dist[i- M_WID].wall == 'D' && window->dist[i- M_WID].doorc == 'y')
-					{
-						scale_textur = all->draw->door->height/ scale ;
-						pos = fmod(window->dist[i- M_WID].posx, 1.0);
-						pos = pos * all->draw->door->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->door->bytes_per_pixel)
-						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-							k++;
-						}
-					}
-					else if (window->dist[i- M_WID].wall == 'D' && window->dist[i- M_WID].doorc == 'x')
-					{
-						scale_textur = all->draw->door->height/ scale ;
-						pos = fmod(window->dist[i - M_WID].posy, 1.0);
-						pos = pos * all->draw->door->width;
-						pos = pos - fmod(pos, 1.0);
-						n = (int) (scale_textur * (j - (HEI / 2 - scale / 2)));
-						k = 0;
-						while (k < all->draw->door->bytes_per_pixel)
-						{
-							window->g_img->pixels[window->wid * j * 4 + i * 4 + k] = all->draw->door->pixels[(int)all->draw->door->width * (int)n * (int)all->draw->door->bytes_per_pixel + (int)pos * (int)all->draw->door->bytes_per_pixel + (int)k];
-							k++;
-						}
-					}
+						ft_put_texturey(all, i, j, all->draw->w_wall);
+					else if (window->dist[i - M_WID].wall == 'D' && window->dist[i- M_WID].doorc == 'y')
+						ft_put_texturex(all, i, j, all->draw->door);
+					else if (window->dist[i - M_WID].wall == 'D' && window->dist[i- M_WID].doorc == 'x')
+						ft_put_texturey(all, i, j, all->draw->door);
 				}
 				j++;
 			}
@@ -334,88 +339,108 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 	}
 }
 
-/* if (window->dist[i].wall == 'N')//dark green
-				{
-					
+void	ft_makeweaponimage(mlx_image_t *img, mlx_texture_t *texture, int wid, int hei)
+{
+	int	i;
+	int	j;
+	int	k;
+	int	imgh;
+	int	imgw;
 
-					
-					window->g_img->pixels[WID * j * 4 + i * 4 + 0] = 0;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 1] = 94;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 2] = 76;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (window->dist[i].wall == 'S')//dark blue
-				{
-					window->g_img->pixels[WID * j * 4 + i * 4 + 0] = 0;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 1] = 58;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 2] = 76;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (window->dist[i].wall == 'E')//green
-				{
-					window->g_img->pixels[WID * j * 4 + i * 4 + 0] = 113;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 1] = 200;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 2] = 152;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 3] = 255;
-				}
-				else if (window->dist[i].wall == 'W')//pink
-				{
-					window->g_img->pixels[WID * j * 4 + i * 4 + 0] = 232;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 1] = 145;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 2] = 170;
-					window->g_img->pixels[WID * j * 4 + i * 4 + 3] = 255;
-				} */
+	i = 0;
+	while (i < wid)
+	{
+		imgw = (int)ft_floor(((float)texture->width / (float)wid) * i);
+		j = 0;
+		while (j < hei)
+		{
+			imgh = (int)ft_floor((((float)texture->height / (float) hei)) * j);
+			k = 0;
+			while (k < texture->bytes_per_pixel)
+			{
+				img->pixels[wid * j * 4 + i * 4 + k] = texture->pixels[(texture->width * imgh * texture->bytes_per_pixel) + imgw * texture->bytes_per_pixel + k];
+				k++;
+			}
+			j++;
+		}
+		i++;
+	}
+}
 
-/* void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
-{	
-	t_all_info *all;
+void ft_put_menu(t_all_info *all)
+{
+	int linesize;
+	int start;
 
-	all = param;
-	if (keydata.key == MLX_KEY_W && keydata.action == 2)
+	start =  HEI - 250;
+	linesize = 30;
+	all->window->menustr[0] = mlx_put_string(all->window->mlx, "CONTROLS", 150, start);
+	start += linesize;
+	all->window->menustr[1] = mlx_put_string(all->window->mlx, "   W/A/S/D: Move", 5, start);
+	start += linesize;
+	all->window->menustr[2] = mlx_put_string(all->window->mlx, "   LEFT/RIGHT ARROWS: Rotate", 5, start);
+	start += linesize;
+	all->window->menustr[3] = mlx_put_string(all->window->mlx, "   LEFT CLICK: Rotate", 5, start);
+	start += linesize;
+	all->window->menustr[4] = mlx_put_string(all->window->mlx, "   RIGHT CLICK DRAG: Rotate", 5, start);
+	start += linesize;
+	all->window->menustr[5] = mlx_put_string(all->window->mlx, "   E: Open doors", 5, start);
+	start += linesize;
+	all->window->menustr[6] = mlx_put_string(all->window->mlx, "   F: Attack", 5, start);
+	start += linesize;
+	all->window->menustr[7] = mlx_put_string(all->window->mlx, "   TAB: Enable/disable menu", 5, start);
+}
+
+void	ft_disable_menu(t_all_info *all)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < 8)
 	{
-		move_player_front(all->info, all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		all->window->menustr[idx]->enabled = false;
+		idx++;
 	}
-	if (keydata.key == MLX_KEY_S && keydata.action == 1)
+}
+
+void	ft_enable_menu(t_all_info *all)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < 8)
 	{
-		move_player_front(all->info, all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		all->window->menustr[idx]->enabled = true;
+		idx++;
 	}
-	if (keydata.key == MLX_KEY_A && keydata.action == 1)
+}
+
+void	ft_enable_images(t_all_info *all)
+{
+	int	idx;
+
+	all->window->g_img->enabled = true;
+	all->window->g_img_mm->enabled = true;
+	if (all->window->attack)
 	{
-		move_player_lateral(all->info, all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		idx = (all->window->frame - all->window->attackbegin);
+		if (idx < 10)
+		{
+			all->window->g_img_w->enabled = false;
+			if (idx > 0)
+				all->window->g_img_wmv[idx - 1]->enabled = false;
+			all->window->g_img_wmv[idx]->enabled = true;
+		}
+		else
+		{
+			all->window->g_img_wmv[9]->enabled = false;
+			all->window->g_img_w->enabled = true;
+			all->window->attack = 0;
+		}
 	}
-	if (keydata.key == MLX_KEY_D && keydata.action == 1)
-	{
-		move_player_lateral(all->info, all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
-	}
-	if (keydata.key == MLX_KEY_RIGHT && keydata.action == 1)
-	{
-		rot_player(all->player, -1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
-	}
-	if (keydata.key == MLX_KEY_LEFT && keydata.action == 1)
-	{
-		rot_player(all->player, 1);
-		ft_angleloop(all->info, all->window, all->player);
-		makeimage(all->window);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
-	}
-	if (keydata.key == MLX_KEY_ESCAPE)
-		mlx_close_window(all->window->mlx);
-} */
+	else
+		all->window->g_img_w->enabled = true;
+}
 
 void	ft_opendoor(t_all_info *all)
 {
@@ -465,49 +490,66 @@ void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
 		move_player_front(all->info, all->player, 1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
 	if (keydata.key == MLX_KEY_S)
 	{
 		move_player_front(all->info, all->player, -1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
 	if (keydata.key == MLX_KEY_A)
 	{
 		move_player_lateral(all->info, all->player, -1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
 	if (keydata.key == MLX_KEY_D)
 	{
 		move_player_lateral(all->info, all->player, 1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
 	if (keydata.key == MLX_KEY_RIGHT)
 	{
 		rot_player(all->player, -1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
 	if (keydata.key == MLX_KEY_LEFT)
 	{
 		rot_player(all->player, 1);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
 	}
-	if (keydata.key == MLX_KEY_O && keydata.action == 1)
+	if (keydata.key == MLX_KEY_E && keydata.action == 1)
 	{
 		ft_opendoor(all);
 		ft_angleloop(all);
 		makeimage(all->window, all);
-		mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+		//ft_enable_images(all);
+	}
+	if (keydata.key == MLX_KEY_TAB && keydata.action == 1)
+	{
+		if (all->window->menustr[0]->enabled)
+			ft_disable_menu(all);
+		else
+			ft_enable_menu(all);
+		//ft_enable_images(all);
+	}
+	if (keydata.key == MLX_KEY_F && keydata.action == 1)
+	{
+		if (all->window->attack == 0)
+		{
+			all->window->attack = 1;
+			all->window->attackbegin = all->window->frame;
+			ft_enable_images(all);
+		}
 	}
 	if (keydata.key == MLX_KEY_ESCAPE)
 		mlx_close_window(all->window->mlx);
@@ -516,7 +558,8 @@ void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param)
 void ft_mlx_cursorfunc(double x, double y, void* param)
 {
 	t_all_info *all;
-	int i;
+	float anglex;
+	float anglelast;
 
 	all = param;
 	if (x > all->window->wid || x < 0 || y > all->window->hei || y < 0 || all->window->action == 0)
@@ -533,11 +576,13 @@ void ft_mlx_cursorfunc(double x, double y, void* param)
 		}
 		else
 		{
-			rot_player_mouse(all->player, -1, (all->window->lastclickx - x) * M_PI / 1000);
+			anglex = M_PI / 4 - ft_calculate_deltaang(x);
+			anglelast = M_PI / 4 - ft_calculate_deltaang(all->window->lastclickx);
+			rot_player_mouse(all->player, 1, (anglelast - anglex));
 			ft_angleloop(all);
 			all->window->lastclickx = x;
 			makeimage(all->window, all);
-			mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+			ft_enable_images(all);
 		}
 	}
 }
@@ -548,6 +593,7 @@ void ft_mlx_mousefunc(mouse_key_t button, action_t action, modifier_key_t mods, 
 	int32_t y;
 
 	all = param;
+	(void)mods;
 	all->window->button = button;
 	all->window->action = action;
 	if (button == 0)
@@ -555,21 +601,19 @@ void ft_mlx_mousefunc(mouse_key_t button, action_t action, modifier_key_t mods, 
 		if (action == 1)
 		{
 			mlx_get_mouse_pos(all->window->mlx, &(all->window->lastclickx), &y);
-			if (all->window->lastclickx < M_WID)
-				return ;
-			if (all->window->lastclickx < WID / 2 + M_WID)
+			if (all->window->lastclickx < WID / 2)
 			{
 				rot_player(all->player, 1);
 				ft_angleloop(all);
 				makeimage(all->window, all);
-				mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+				ft_enable_images(all);
 			}
 			else
 			{
 				rot_player(all->player, -1);
 				ft_angleloop(all);
 				makeimage(all->window, all);
-				mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+				ft_enable_images(all);
 			}
 		}
 	}
@@ -584,18 +628,53 @@ void ft_mlx_mousefunc(mouse_key_t button, action_t action, modifier_key_t mods, 
 
 void ft_hook(void *arg)
 {
-	t_all_info *all;
+	t_all_info	*all;
 
 	all = arg;
 	mlx_key_hook(all->window->mlx, &ft_mlx_keyfunc, all);
 	if (all->window->frame % 5 == 0)
 		mlx_mouse_hook(all->window->mlx, &ft_mlx_mousefunc, all);
+	if (all->window->attack)
+	{
+		ft_enable_images(all);
+	}
 	all->window->frame++;
+}
+
+void	ft_makeweaponmvimages(t_all_info *all)
+{
+	int idx;
+
+	idx = 0;
+	while (idx < 10)
+	{
+		all->window->g_img_wmv[idx] = mlx_new_image(all->window->mlx, W_WID, W_HEI);
+		ft_makeweaponimage(all->window->g_img_wmv[idx], all->draw->weapon_mv[idx], W_WID, W_HEI);
+		idx++;
+	}
+}
+
+void	ft_put_images(t_all_info *all)
+{
+	int idx;
+
+	mlx_image_to_window(all->window->mlx, all->window->g_img, 0, 0);
+	mlx_image_to_window(all->window->mlx, all->window->g_img_mm, 0, 0);
+	idx = 0;
+	mlx_image_to_window(all->window->mlx, all->window->g_img_w, 400, HEI - 350);
+	while (idx < 10)
+	{
+		all->window->g_img_wmv[idx]->enabled = false;
+		mlx_image_to_window(all->window->mlx, all->window->g_img_wmv[idx], 400, HEI - 350);
+		idx++;
+	}
+	ft_put_menu(all);
+	all->window->menu = 1;
+	mlx_image_to_window(all->window->mlx, all->window->g_img_to, WID - 500, HEI - 500);
 }
 
 void	ft_game(t_cub_info *info, t_player_info *player)
 {
-	//t_player_info	player;
 	t_window_info	window;
 	t_all_info		all;
 	t_draw			draw;
@@ -607,13 +686,18 @@ void	ft_game(t_cub_info *info, t_player_info *player)
 	all.info = info;
 	all.player = player;
 	all.draw = &draw;
-	//all.player = &player;
-	window.g_img = mlx_new_image(window.mlx, window.wid, window.hei);
-	//printf("PLAYER: xpos -> %f, ypos -> %f, angle -> %f\n", player->xpos, player->ypos, player->pov);
-	//printf("PLAYER: xpos -> %f, ypos -> %f, angle -> %f\n", player->xpos, player->ypos, player->pov);
+	window.g_img = mlx_new_image(window.mlx, WID, HEI);
+	window.g_img_mm = mlx_new_image(window.mlx, M_WID, M_HEI);
+	window.g_img_w = mlx_new_image(window.mlx, W_WID, W_HEI);
+	window.g_img_tc = mlx_new_image(window.mlx, T_WID, T_HEI);
+	window.g_img_to = mlx_new_image(window.mlx, T_WID, T_HEI);
+	ft_makeweaponimage(all.window->g_img_w, all.draw->weapon, W_WID, W_HEI);
+	ft_makeweaponimage(all.window->g_img_tc, all.draw->treasurec, T_WID, T_HEI);
+	ft_makeweaponimage(all.window->g_img_to, all.draw->treasureo, T_WID, T_HEI);
+	ft_makeweaponmvimages(&all);
 	ft_angleloop(&all);
 	makeimage(&window, &all);
-	mlx_image_to_window(window.mlx, window.g_img, 0, 0);
+	ft_put_images(&all);
 	mlx_loop_hook(window.mlx, &ft_hook, &all);
 	mlx_loop(window.mlx);
 	mlx_terminate(window.mlx);
@@ -622,4 +706,5 @@ void	ft_game(t_cub_info *info, t_player_info *player)
 	mlx_delete_texture(all.draw->e_wall);
 	mlx_delete_texture(all.draw->w_wall);
 	mlx_delete_texture(all.draw->door);
+	//delete all textures!!
 }

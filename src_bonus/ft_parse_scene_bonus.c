@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/05 08:32:51 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/11 08:48:56 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ void	ft_skip_emptyline(t_cub_info *info, int i)
 void	ft_check_char(char c, t_cub_info *info)
 {
 	if (c != '0' && c != '1' && c != 'N' && c != 'S' && c != 'W' && c != 'E'
-		&& c != ' ' && c != 'D')
+		&& c != ' ' && c != 'D' && c != 'c')
 		ft_errfreeexit("Invalid character in map.", info);
 }
 
@@ -395,7 +395,7 @@ void	ft_check_closedmap(t_cub_info *info)
 		{
 			if (mapdup[i][j] == '0' || mapdup[i][j] == 'N' || mapdup[i][j] == \
 				'S' || mapdup[i][j] == 'W' || mapdup[i][j] == 'E'
-				|| mapdup[i][j] == 'D')
+				|| mapdup[i][j] == 'D' || mapdup[i][j] == 'c')
 				ft_fillx(mapdup, i, j, info);
 			j++;
 		}
