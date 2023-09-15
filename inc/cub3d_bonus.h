@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/11 09:08:51 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/14 08:59:01 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,12 @@ typedef struct s_impact_tc
 	char	tcside;
 	double	posx;
 	double	posy;
+	int		locx;
+	int		locy;
+	double	dist;
+	double	projy;
+	double	otherdist;
+
 }			t_impact_tc;
 
 typedef struct s_impact
@@ -110,8 +116,18 @@ typedef struct s_impact
 	double		projx;
 	double		projy;
 	double		deltadist;
-	t_impact_tc	*tc;
+	t_impact_tc	tc;
 }				t_impact;
+
+typedef struct s_tc_list
+{
+	struct s_tc_list	*prev;
+	int			locx;
+	int			locy;
+	int			begin;
+	int			end;
+	struct s_tc_list	*next;
+}				t_tc_list;
 
 typedef struct s_window_info
 {
@@ -122,7 +138,6 @@ typedef struct s_window_info
 	mlx_image_t	*g_img_mm;
 	mlx_image_t	*g_img_w;
 	mlx_image_t	*g_img_tc;
-	mlx_image_t	*g_img_to;
 	mlx_image_t *g_img_wmv[10];
 	mlx_image_t	*menustr[8];
 	int			lastclickx;
@@ -151,6 +166,7 @@ typedef struct s_dist
 	int		ycross;
 	int		dirx;
 	int		diry;
+	double	ang;
 }			t_dist;
 
 typedef struct s_all_info
