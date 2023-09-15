@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:55:36 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/11 09:02:54 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/14 09:19:18 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,6 +339,73 @@ void	makeimage(t_window_info	*window, t_all_info *all)
 	}
 }
 
+void	ft_freelistend(t_tc_list *list)
+{
+	t_tc_list	*tmp;
+
+	while (list && list->prev)
+	{
+		tmp = list->prev;
+		free(list);
+		list = tmp;
+	}
+	if (list)
+		free(list);
+}
+
+t_tc_list	*ft_find_treasure(t_all_info *all)
+{
+	int i;
+	t_tc_list *tc_list;
+	t_tc_list *tmp;
+	t_tc_list *top;
+
+	i = 0;
+	tc_list = NULL;
+	top = NULL;
+	while (i < WID)
+	{
+		if (all->window->dist[i].tc.tc == 1)
+		{
+			if (tc_list == NULL)
+			{
+				tc_list = malloc(sizeof(t_tc_list));
+				if (!tc_list)
+					return (NULL);
+				top = tc_list;
+				tc_list->prev = NULL;
+				tc_list->locx = all->window->dist[i].tc.locx;
+				tc_list->locy = all->window->dist[i].tc.locy;
+				tc_list->begin = i;
+			}
+			else if (tc_list && tc_list->locx == all->window->dist[i].tc.locx && tc_list->locy == all->window->dist[i].tc.locy)
+			{
+				if (i == WID - 1 || (i < WID - 1 && (all->window->dist[i + 1].tc.tc == 0 || all->window->dist[i + 1].tc.locx != all->window->dist[i].tc.locx || all->window->dist[i + 1].tc.locy != all->window->dist[i].tc.locy)))
+					tc_list->end = i;
+			}
+			else if (tc_list && (tc_list->locx != all->window->dist[i].tc.locx || tc_list->locy != all->window->dist[i].tc.locy))
+			{
+				tmp = malloc(sizeof(t_tc_list));
+				if (!tc_list)
+					return (ft_freelistend(tc_list), NULL);
+				tc_list->next = tmp;
+				tmp->prev = tc_list;
+				tc_list = tc_list->next;
+				tc_list->locx = all->window->dist[i].tc.locx;
+				tc_list->locy = all->window->dist[i].tc.locy;
+				tc_list->begin = i;
+			}
+		}
+		i++;
+	}
+	return (top);
+}
+
+/* void	ft_maketreasureimage(t_all_info *all)
+{
+
+} */
+
 void	ft_makeweaponimage(mlx_image_t *img, mlx_texture_t *texture, int wid, int hei)
 {
 	int	i;
@@ -670,7 +737,8 @@ void	ft_put_images(t_all_info *all)
 	}
 	ft_put_menu(all);
 	all->window->menu = 1;
-	mlx_image_to_window(all->window->mlx, all->window->g_img_to, WID - 500, HEI - 500);
+	mlx_image_to_window(all->window->mlx, all->window->g_img_tc, 0, 0);
+	all->window->g_img_tc->enabled = false;
 }
 
 void	ft_game(t_cub_info *info, t_player_info *player)
@@ -689,11 +757,8 @@ void	ft_game(t_cub_info *info, t_player_info *player)
 	window.g_img = mlx_new_image(window.mlx, WID, HEI);
 	window.g_img_mm = mlx_new_image(window.mlx, M_WID, M_HEI);
 	window.g_img_w = mlx_new_image(window.mlx, W_WID, W_HEI);
-	window.g_img_tc = mlx_new_image(window.mlx, T_WID, T_HEI);
-	window.g_img_to = mlx_new_image(window.mlx, T_WID, T_HEI);
+	window.g_img_tc = mlx_new_image(window.mlx, WID, HEI);
 	ft_makeweaponimage(all.window->g_img_w, all.draw->weapon, W_WID, W_HEI);
-	ft_makeweaponimage(all.window->g_img_tc, all.draw->treasurec, T_WID, T_HEI);
-	ft_makeweaponimage(all.window->g_img_to, all.draw->treasureo, T_WID, T_HEI);
 	ft_makeweaponmvimages(&all);
 	ft_angleloop(&all);
 	makeimage(&window, &all);
