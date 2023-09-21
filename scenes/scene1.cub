@@ -1,7 +1,9 @@
 NO ./textures/wall.png
 SO ./textures/floor.png		    
 WE ./textures/space.png 
-EA ./textures/woodendoor.png 				
+EA ./textures/cabron.png
+DO ./textures/woodendoor.png 
+
 
 F 113,66,52
 C 100,149,237		

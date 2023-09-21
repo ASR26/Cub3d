@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/06 13:30:17 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/17 16:14:57 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@
 // void	ft_hook(void *arg);
 // void	ft_game(t_cub_info *info, t_player_info *player);
 
-
 // void	ft_init_info(t_cub_info *info);
 // void    ft_set_player(t_player_info *player, t_cub_info *info);
 
-void ft_leaks(void)
+/* void ft_leaks(void)
 {
 	system("leaks -q cub3d_bonus");
-}
+} */
 
 void	ft_init_info(t_cub_info *info)
 {

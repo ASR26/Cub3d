@@ -1,14 +1,11 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture			    
-WE ./path_to_the_west_texture   
-EA ./path_to_the_east_texture  				
-
-F 255,100,0
-C 225,30,108
+NO ./textures/wall.png
+SO ./textures/floor.png		    
+WE ./textures/space.png 
+EA ./textures/wintertrees.png			
+DO ./textures/woodendoor.png 
+F 113,66,52
+C 100,149,237
 
 111
 1N1
 111
-
-
-0123	ab

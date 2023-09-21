@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_set_player_bonus.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/17 15:27:45 by ysmeding          #+#    #+#             */
+/*   Updated: 2023/09/17 16:20:21 by ysmeding         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub3d_bonus.h"
 
 //void    ft_set_player(t_player_info *player, t_cub_info *info);
@@ -41,93 +53,93 @@ int	ft_strchr_i(const char *s, int c)
 	return (-1);
 }
 
-double  find_player_x(t_player_info *player, t_cub_info *info)
+double	find_player_x(t_player_info *player, t_cub_info *info)
 {
-    int i;
+	int	i;
 
-    (void)player;//??
-    i = -1;
-    while (info->map[++i])
-    {
-        if (ft_strchr_r(info->map[i], "NSWE") != -1)
-            return (ft_strchr_r(info->map[i], "NSWE") + 0.5f);
-    }
-    return (-1);
+	(void)player;//??
+	i = -1;
+	while (info->map[++i])
+	{
+		if (ft_strchr_r(info->map[i], "NSWE") != -1)
+			return (ft_strchr_r(info->map[i], "NSWE") + 0.5f);
+	}
+	return (-1);
 }
 
-double  find_player_y(t_player_info *player, t_cub_info *info)
+double	find_player_y(t_player_info *player, t_cub_info *info)
 {
-    int i;
+	int	i;
 
-    (void)player;//??
-    i = -1;
-    while (info->map[++i])
-    {
-        if (ft_strchr_r(info->map[i], "NSWE") != -1)
-            return (i + 0.5f);
-    }
-    return (-1);
+	(void)player;//??
+	i = -1;
+	while (info->map[++i])
+	{
+		if (ft_strchr_r(info->map[i], "NSWE") != -1)
+			return (i + 0.5f);
+	}
+	return (-1);
 }
 
-void    set_player_rot(t_player_info *player, char c)
+void	set_player_rot(t_player_info *player, char c)
 {
-    if (c == 'E')
-    {
-        player->xdir = 1;
-        player->ydir = 0;
-        player->pov = 0;
-    }
-    else if (c == 'N')
-    {
-        player->xdir = 0;
-        player->ydir = -1;
-        player->pov = M_PI / 2;
-    }
-    else if (c == 'W')
-    {
-        player->xdir = -1;
-        player->ydir = 0;
-        player->pov = M_PI;
-    }
-    else if (c == 'S')
-    {
-        player->xdir = 0;
-        player->ydir = 1;
-        player->pov = 3 * M_PI / 2;
-    }
+	if (c == 'E')
+	{
+		player->xdir = 1;
+		player->ydir = 0;
+		player->pov = 0;
+	}
+	else if (c == 'N')
+	{
+		player->xdir = 0;
+		player->ydir = -1;
+		player->pov = M_PI / 2;
+	}
+	else if (c == 'W')
+	{
+		player->xdir = -1;
+		player->ydir = 0;
+		player->pov = M_PI;
+	}
+	else if (c == 'S')
+	{
+		player->xdir = 0;
+		player->ydir = 1;
+		player->pov = 3 * M_PI / 2;
+	}
 }
 
-void  find_player_rot(t_player_info *player, t_cub_info *info)
+void	find_player_rot(t_player_info *player, t_cub_info *info)
 {
-    int i;
+	int	i;
 
-    i = -1;
-    while (info->map[++i])
-    {
-        if (ft_strchr_r(info->map[i], "NSWE") != -1)
-        {
-            if (ft_strchr_i(info->map[i], 'E') != -1)
-                set_player_rot(player, 'E');
-            else if (ft_strchr_i(info->map[i], 'N') != -1)
-                set_player_rot(player, 'N');
-            else if (ft_strchr_i(info->map[i], 'W') != -1)
-                set_player_rot(player, 'W');
-            else if (ft_strchr_i(info->map[i], 'S') != -1)
-                set_player_rot(player, 'S');
-        }
-    }
+	i = -1;
+	while (info->map[++i])
+	{
+		if (ft_strchr_r(info->map[i], "NSWE") != -1)
+		{
+			if (ft_strchr_i(info->map[i], 'E') != -1)
+				set_player_rot(player, 'E');
+			else if (ft_strchr_i(info->map[i], 'N') != -1)
+				set_player_rot(player, 'N');
+			else if (ft_strchr_i(info->map[i], 'W') != -1)
+				set_player_rot(player, 'W');
+			else if (ft_strchr_i(info->map[i], 'S') != -1)
+				set_player_rot(player, 'S');
+		}
+	}
 }
 
-void    set_player_camera(t_player_info *player)
+void	set_player_camera(t_player_info *player)
 {
-    player->xcamera = -player->ydir;
-    player->ycamera = player->xdir;
+	player->xcamera = -player->ydir;
+	player->ycamera = player->xdir;
 }
 
-void    ft_set_player(t_player_info *player, t_cub_info *info)
+void	ft_set_player(t_player_info *player, t_cub_info *info)
 {
-    player->xpos = find_player_x(player, info);
-    player->ypos = find_player_y(player, info);
-    find_player_rot(player, info);
-    set_player_camera(player);
+	player->xpos = find_player_x(player, info);
+	player->ypos = find_player_y(player, info);
+	find_player_rot(player, info);
+	set_player_camera(player);
 }

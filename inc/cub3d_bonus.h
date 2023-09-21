@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/14 08:59:01 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/21 10:10:41 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # include <fcntl.h>
 /* errno */
 # include <errno.h>
-
+/* math functions */
 # include <math.h>
 
 # define ROT_SPEED M_PI/36
@@ -40,7 +40,7 @@
 # define W_WID 350
 # define W_HEI 350
 # define T_WID 275
-# define T_HEI 275
+# define T_HEI 175
 # define WALL_HEI 600
 
 typedef struct s_minimapit
@@ -277,7 +277,7 @@ void	ft_set_player(t_player_info *player, t_cub_info *info);
 
 /* --------------------------------- game.c --------------------------------- */
 
-int		ft_floor(float pos);
+int		ft_fl(float pos);
 void	ft_game(t_cub_info *info, t_player_info *player);
 
 /* -------------------------------- matrix.c -------------------------------- */

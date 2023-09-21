@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 11:45:49 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/13 08:34:52 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/20 09:31:35 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	ft_init_dist(t_dist *dist, t_player_info *player, double ang)
 	dist->raydirx = player->xdir;
 	dist->raydiry = player->ydir;
 	rotate_z(&(dist->raydirx), &(dist->raydiry), ang);
-	if (dist->rayang > M_PI / 2 && dist->rayang < 3 * M_PI /2)
+	if (dist->rayang > M_PI / 2 && dist->rayang < 3 * M_PI / 2)
 		dist->dirx = -1;
 	else
 		dist->dirx = 1;
@@ -156,7 +156,7 @@ void	ft_xcross_util(t_all_info *all, t_dist *dist, t_impact *impact)
 void	ft_loopxcrossings(t_all_info *all, t_dist *dist, t_impact *impact)
 {
 	ft_xcross_util(all, dist, impact);
-	while ((impact->posx > 0 && impact->posx < all->info->wid) 
+	while ((impact->posx > 0 && impact->posx < all->info->wid)
 		&& (impact->posy > 0 && impact->posy < all->info->hei))
 	{
 		if (all->info->map[(int)(impact->posy - fmod(impact->posy, 1.0))] \
@@ -244,52 +244,81 @@ void	ft_init_impact_tc(t_impact_tc *impact)
 	impact->otherdist = -1;
 }
 
+// void	ft_one_step_right(t_all_info *all, t_dist *dist, t_impact_tc *impact)
+// {
+// 	(void)all;
+// 	(void)dist;
+// 	//if (fmod(all->player->xpos, 1.0) >= 0.5)
+// 		ft_init_impact_tc(impact);
+// 	/* else
+// 	{
+// 		impact->tc = 1;
+// 		impact->tcside = 'x';
+// 		impact->dist = \
+// 		ft_abs(0.5 - fmod(all->player->xpos, 1.0)) / cos(dist->angx);
+// 		impact->posx = impact->posx + dist->raydirx * impact->dist;
+// 		impact->posy = impact->posy + dist->raydiry * impact->dist;
+// 		impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
+// 		impact->projy = \
+// 		y_projection(M_PI / 2 - dist->ang, impact->dist);
+// 	} */
+// }
+
+// void	ft_one_step_left(t_all_info *all, t_dist *dist, t_impact_tc *impact)
+// {
+// 	(void)all;
+// 	(void)dist;
+// 	//if (fmod(all->player->xpos, 1.0) < 0.5)
+// 		ft_init_impact_tc(impact);
+// 	/* else
+// 	{
+// 		impact->tc = 1;
+// 		impact->tcside = 'x';
+// 		impact->dist = ft_abs(fmod(all->player->xpos, 1.0)) / cos(dist->angx);
+// 		impact->posx = impact->posx + dist->raydirx * impact->dist;
+// 		impact->posy = impact->posy + dist->raydiry * impact->dist;
+// 		impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
+// 		impact->projy = \
+// 		y_projection(M_PI / 2 - dist->ang, impact->dist);
+// 	} */
+// }
+
 void	ft_xcross_util_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
 {
 	impact->locx = (int)(all->player->xpos - fmod(all->player->xpos, 1.0));
 	impact->posx = all->player->xpos;
 	impact->posy = all->player->ypos;
-	if (all->info->map[(int)(impact->posy - fmod(impact->posy, 1.0))][impact->locx] == 'c')
+	if (all->info->map[(int)(impact->posy - \
+	fmod(impact->posy, 1.0))][impact->locx] == 'c')
 	{
-		if (dist->dirx == 1)
-		{
-			if (fmod(all->player->xpos, 1.0) >= 0.5)
-				ft_init_impact_tc(impact);
-			else
-			{
-				impact->tc = 1;
-				impact->tcside = 'x';
-				impact->dist = (0.5 - fmod(all->player->xpos, 1.0)) / cos(dist->angx);
-				impact->posx = impact->posx + dist->raydirx * impact->dist;
-				impact->posy = impact->posy + dist->raydiry * impact->dist;
-				impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
-				impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
-			}
-		}
-		if (dist->dirx == -1)
-		{
-			if (fmod(all->player->xpos, 1.0) < 0.5)
-				ft_init_impact_tc(impact);
-			else
-			{
-				impact->tc = 1;
-				impact->tcside = 'x';
-				impact->dist = (fmod(all->player->xpos, 1.0))/cos(dist->angx);
-				impact->posx = impact->posx + dist->raydirx * impact->dist;
-				impact->posy = impact->posy + dist->raydiry * impact->dist;
-				impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
-				impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
-			}
-		}
+		ft_init_impact_tc(impact);
 		return ;
 	}
 	else
 	{
+		impact->dist = dist->distx;
 		impact->posx += dist->distx * dist->raydirx;
 		impact->posy += dist->distx * dist->raydiry;
 		impact->locx += dist->dirx;
 	}
+}
 
+void	ft_set_impact_tcx(t_dist *dist, t_impact_tc *impact)
+{
+	impact->tc = 1;
+	impact->tcside = 'x';
+	// if (dist->dirx == 1)
+	// 	impact->otherdist = \
+	// 	ft_abs((0.5 - fmod(impact->posx, 1.0)) / cos(dist->angx));
+	// if (dist->dirx == -1)
+	// 	impact->otherdist = \
+	// 	ft_abs((fmod(impact->posx, 1.0)) / cos(dist->angx));
+	// //printf("x: dist->%f, otherdist->%f\n", impact->dist, impact->otherdist);
+	// impact->dist += impact->otherdist;
+	// impact->posx += dist->raydirx * impact->otherdist;
+	// impact->posy += dist->raydiry * impact->otherdist;
+	impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
+	impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
 }
 
 void	ft_loopxcrossings_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
@@ -303,17 +332,7 @@ void	ft_loopxcrossings_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
 		if (all->info->map[(int)(impact->posy - fmod(impact->posy, 1.0))] \
 		[impact->locx] == 'c')
 		{
-			impact->tc = 1;
-			impact->tcside = 'x';
-			if (dist->dirx == 1)
-				impact->otherdist += (0.5 - fmod(all->player->xpos, 1.0)) / cos(dist->angx);
-			if (dist->dirx == -1)
-				impact->otherdist += (fmod(all->player->xpos, 1.0))/cos(dist->angx);
-			impact->dist += impact->otherdist;
-			impact->posx += impact->posx + dist->raydirx * impact->otherdist;
-			impact->posy += impact->posy + dist->raydiry * impact->otherdist;
-			impact->locy = (int)(impact->posy - fmod(impact->posy, 1.0));
-			impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
+			ft_set_impact_tcx(dist, impact);
 			break ;
 		}
 		impact->posx += dist->deltax * dist->raydirx;
@@ -323,52 +342,81 @@ void	ft_loopxcrossings_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
 	}
 }
 
+// void	ft_one_step_up(t_all_info *all, t_dist *dist, t_impact_tc *impact)
+// {
+// 	(void)all;
+// 	(void)dist;
+// 	//if (fmod(all->player->ypos, 1.0) >= 0.5)
+// 		ft_init_impact_tc(impact);
+// 	/* else
+// 	{
+// 		impact->tc = 1;
+// 		impact->tcside = 'y';
+// 		impact->dist = \
+// 		ft_abs((0.5 - fmod(all->player->ypos, 1.0)) / sin(dist->angx));
+// 		impact->posx = impact->posx + dist->raydirx * impact->dist;
+// 		impact->posy = impact->posy + dist->raydiry * impact->dist;
+// 		impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
+// 		impact->projy = \
+// 		y_projection(M_PI / 2 - dist->ang, impact->dist);
+// 	} */
+// }
+
+// void	ft_one_step_down(t_all_info *all, t_dist *dist, t_impact_tc *impact)
+// {
+// 	(void)all;
+// 	(void)dist;
+// 	//if (fmod(all->player->ypos, 1.0) < 0.5)
+// 		ft_init_impact_tc(impact);
+// 	/* else
+// 	{
+// 		impact->tc = 1;
+// 		impact->tcside = 'y';
+// 		impact->dist = ft_abs((fmod(all->player->ypos, 1.0)) / sin(dist->angx));
+// 		impact->posx = impact->posx + dist->raydirx * impact->dist;
+// 		impact->posy = impact->posy + dist->raydiry * impact->dist;
+// 		impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
+// 		impact->projy = \
+// 		y_projection(M_PI / 2 - dist->ang, impact->dist);
+// 	} */
+// }
+
 void	ft_ycross_util_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
 {
 	impact->locy = (int)(all->player->ypos - fmod(all->player->ypos, 1.0));
 	impact->posx = all->player->xpos;
 	impact->posy = all->player->ypos;
-	if (all->info->map[impact->locy][(int)(impact->posx - fmod(impact->posx, 1.0))] == 'c')
+	if (all->info->map[impact->locy][(int)(impact->posx - \
+	fmod(impact->posx, 1.0))] == 'c')
 	{
-		if (dist->diry == 1)
-		{
-			if (fmod(all->player->ypos, 1.0) >= 0.5)
-				ft_init_impact_tc(impact);
-			else
-			{
-				impact->tc = 1;
-				impact->tcside = 'y';
-				impact->dist = (0.5 - fmod(all->player->ypos, 1.0)) / sin(dist->angx);
-				impact->posx = impact->posx + dist->raydirx * impact->dist;
-				impact->posy = impact->posy + dist->raydiry * impact->dist;
-				impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
-				impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
-			}
-		}
-		if (dist->diry == -1)
-		{
-			if (fmod(all->player->ypos, 1.0) < 0.5)
-				ft_init_impact_tc(impact);
-			else
-			{
-				impact->tc = 1;
-				impact->tcside = 'y';
-				impact->dist = (fmod(all->player->ypos, 1.0))/sin(dist->angx);
-				impact->posx = impact->posx + dist->raydirx * impact->dist;
-				impact->posy = impact->posy + dist->raydiry * impact->dist;
-				impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
-				impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
-			}
-		}
+		ft_init_impact_tc(impact);
 		return ;
 	}
 	else
 	{
+		impact->dist = dist->disty;
 		impact->posx += dist->disty * dist->raydirx;
 		impact->posy += dist->disty * dist->raydiry;
 		impact->locy += dist->diry;
 	}
+}
 
+void	ft_set_impact_tcy(t_dist *dist, t_impact_tc *impact)
+{
+	impact->tc = 1;
+	impact->tcside = 'y';
+// 	if (dist->diry == 1)
+// 		impact->otherdist = \
+// 		ft_abs((0.5 - fmod(impact->posy, 1.0)) / sin(dist->angx));
+// 	if (dist->diry == -1)
+// 		impact->otherdist = \
+// 		ft_abs((fmod(impact->posy, 1.0)) / sin(dist->angx));
+// //	printf("y: dist->%f, otherdist->%f\n", impact->dist, impact->otherdist);
+// 	impact->dist += impact->otherdist;
+// 	impact->posx += dist->raydirx * impact->otherdist;
+// 	impact->posy += dist->raydiry * impact->otherdist;
+	impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
+	impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
 }
 
 void	ft_loopycrossings_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
@@ -376,27 +424,17 @@ void	ft_loopycrossings_tc(t_all_info *all, t_dist *dist, t_impact_tc *impact)
 	ft_ycross_util_tc(all, dist, impact);
 	if (impact->tc == 1)
 		return ;
-	while ((impact->posx > 0 && impact->posx < all->info->wid) 
+	while ((impact->posx > 0 && impact->posx < all->info->wid)
 		&& (impact->locy >= 0 && impact->locy < all->info->hei))
 	{
 		if (all->info->map[impact->locy] \
 		[(int)(impact->posx - fmod(impact->posx, 1.0))] == 'c')
 		{
-			impact->tc = 1;
-			impact->tcside = 'y';
-			if (dist->diry == 1)
-				impact->otherdist += (0.5 - fmod(all->player->ypos, 1.0)) / sin(dist->angx);
-			if (dist->diry == -1)
-				impact->otherdist += (fmod(all->player->ypos, 1.0))/sin(dist->angx);
-			impact->dist += impact->otherdist;
-			impact->posx += impact->posx + dist->raydirx * impact->otherdist;
-			impact->posy += impact->posy + dist->raydiry * impact->otherdist;
-			impact->locx = (int)(impact->posx - fmod(impact->posx, 1.0));
-			impact->projy = y_projection(M_PI / 2 - dist->ang, impact->dist);
+			ft_set_impact_tcy(dist, impact);
 			break ;
 		}
-		impact->posx += dist->deltax * dist->raydirx;
-		impact->posy += dist->deltax * dist->raydiry;
+		impact->posx += dist->deltay * dist->raydirx;
+		impact->posy += dist->deltay * dist->raydiry;
 		impact->dist += dist->deltay;
 		impact->locy += dist->diry;
 	}
@@ -427,14 +465,15 @@ void	ft_impact_treasure(t_all_info *all, t_dist *dist, t_impact *impact)
 	if (dist->disty >= 0)
 		ft_loopycrossings_tc(all, dist, &impacty);
 	if (impactx.tc == 0 && impacty.tc == 0)
-		return;
+		return ;
 	if (impactx.tc == 0 || (impactx.tc == 1 && impactx.dist > impacty.dist))
 		ft_copy_impact_tc(&(impact->tc), impacty);
 	if (impacty.tc == 0 || (impacty.tc == 1 && impacty.dist > impactx.dist))
 		ft_copy_impact_tc(&(impact->tc), impactx);
+	//printf("dist->%f\n", impact->tc.dist);
 }
 
-void 	ft_calculatedist(t_all_info *all, double ang, t_impact *impact)
+void	ft_calculatedist(t_all_info *all, double ang, t_impact *impact)
 {
 	t_dist		dist;
 	t_impact	impactx;
@@ -472,10 +511,10 @@ double	ft_calculate_deltaang(int i)
 
 	side_c = (WID / 2) / (sin(M_PI / 4));
 	angle_a = M_PI / 4;
-	side_b = (double) i;
+	side_b = (double) i + 0.5;
 	side_a = sqrt(side_b * side_b + side_c * side_c
 			- 2 * side_b * side_c * cos(angle_a));
-	angle_b = asin((sin(angle_a)/side_a) * side_b);
+	angle_b = asin((sin(angle_a) / side_a) * side_b);
 	return (angle_b);
 }
 
@@ -491,7 +530,7 @@ void	ft_angleloop(t_all_info	*all)
 	{
 		delta_ang = ft_calculate_deltaang(i);
 		ft_calculatedist(all, ang - delta_ang, &(all->window->dist[i]));
-		ft_calculatedist(all, -ang + delta_ang, 
+		ft_calculatedist(all, -ang + delta_ang,
 			&(all->window->dist[WID - 1 - i]));
 		i++;
 	}

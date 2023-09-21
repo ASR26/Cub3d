@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/11 08:48:56 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/17 16:20:06 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -415,8 +415,8 @@ void	ft_checkdoorwalls(int i, int j, t_cub_info *info)
 
 void	ft_check_door(t_cub_info *info)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 	int	doorcount;
 
 	doorcount = 0;
