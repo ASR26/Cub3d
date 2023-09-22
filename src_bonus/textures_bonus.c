@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 08:42:30 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/21 10:52:28 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 08:10:36 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ void	ft_setdraw(t_draw *draw, t_cub_info *cub)
 		free (name);
 		i++;
 	}
-	draw->treasurec = mlx_load_png("./textures/treasurechestclose.png");
-	draw->treasureo = mlx_load_png("./textures/treasurechestopen.png");
+	draw->treasurec = mlx_load_png("./textures/tc_close.png");
+	draw->treasureo = mlx_load_png("./textures/tc_open.png");
 	ft_checkdraw(draw, cub);
 }
 
 void	ft_checkdraw(t_draw *draw, t_cub_info *cub)
 {
-	int i;
+	int	i;
 
 	if (!draw->n_wall || !draw->s_wall || !draw->e_wall || !draw->w_wall)
 		ft_errfreeexit2("One of the wall textures could not be loaded.", cub,

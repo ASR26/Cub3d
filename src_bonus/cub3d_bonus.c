@@ -6,22 +6,11 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/17 16:14:57 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:47:30 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
-
-// void    ft_set_player(t_player_info *player, t_cub_info *info);
-// void    rot_player(t_player_info *player, int i);
-// void    move_player(t_cub_info *cub, t_player_info *player, int i);
-
-// void	ft_initwindow(t_window_info	*window);
-// void	ft_hook(void *arg);
-// void	ft_game(t_cub_info *info, t_player_info *player);
-
-// void	ft_init_info(t_cub_info *info);
-// void    ft_set_player(t_player_info *player, t_cub_info *info);
 
 /* void ft_leaks(void)
 {

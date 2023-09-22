@@ -6,17 +6,14 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 13:29:38 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/06 13:29:39 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 13:46:24 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
 
-//void	ft_skipspace(char *line, int *len);
-
-void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
+void	ft_check_dup_in_line(char *line, int *ct)
 {
-	(void)info;//??
 	if (ft_strlen(line) >= 2 && line[0] == 'N' && line[1] == 'O')
 		*ct += 1;
 	else if (ft_strlen(line) >= 2 && line[0] == 'S' && line[1] == 'O')
@@ -50,7 +47,7 @@ void	ft_check_dup_param(t_cub_info *info)
 			i--;
 		}
 		else
-			ft_check_dup_in_line(&(info->scene[i][j]), info, &ct);
+			ft_check_dup_in_line(&(info->scene[i][j]), &ct);
 		i++;
 	}
 	if (ct != 21)
