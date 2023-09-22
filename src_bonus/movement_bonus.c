@@ -6,13 +6,11 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 11:12:43 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/21 13:00:13 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 15:15:37 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
-
-//double	ft_setang(double ang);
 
 void	move_player_front(t_cub_info *cub, t_player_info *player, int i)
 {

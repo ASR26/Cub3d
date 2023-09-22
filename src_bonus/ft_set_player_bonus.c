@@ -6,13 +6,11 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/17 15:27:45 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/21 13:03:43 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:43:41 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
-
-//void    ft_set_player(t_player_info *player, t_cub_info *info);
 
 double	find_player_x(t_cub_info *info)
 {

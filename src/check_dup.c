@@ -1,10 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_dup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/09/22 13:46:00 by ysmeding          #+#    #+#             */
+/*   Updated: 2023/09/22 13:46:05 by ysmeding         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/cub3d.h"
 
-//void	ft_skipspace(char *line, int *len);
-
-void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
+void	ft_check_dup_in_line(char *line, int *ct)
 {
-	(void)info;//??
 	if (ft_strlen(line) >= 2 && line[0] == 'N' && line[1] == 'O')
 		*ct += 1;
 	else if (ft_strlen(line) >= 2 && line[0] == 'S' && line[1] == 'O')
@@ -12,7 +21,7 @@ void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
 	else if (ft_strlen(line) >= 2 && line[0] == 'W' && line[1] == 'E')
 		*ct += 3;
 	else if (ft_strlen(line) >= 2 && line[0] == 'E' && line[1] == 'A')
-    	*ct += 4;
+		*ct += 4;
 	else if (ft_strlen(line) >= 1 && line[0] == 'F')
 		*ct += 5;
 	else if (ft_strlen(line) >= 1 && line[0] == 'C')
@@ -20,15 +29,15 @@ void	ft_check_dup_in_line(char *line, t_cub_info *info, int *ct)
 	return ;
 }
 
-void    ft_check_dup_param(t_cub_info *info)
+void	ft_check_dup_param(t_cub_info *info)
 {
-    int i;
-    int j;
-    int ct;
+	int	i;
+	int	j;
+	int	ct;
 
-    i = 0;
-    ct = 0;
-    while (info->scene[i])
+	i = 0;
+	ct = 0;
+	while (info->scene[i])
 	{
 		j = 0;
 		ft_skipspace(info->scene[i], &j);
@@ -38,7 +47,7 @@ void    ft_check_dup_param(t_cub_info *info)
 			i--;
 		}
 		else
-			ft_check_dup_in_line(&(info->scene[i][j]), info, &ct);
+			ft_check_dup_in_line(&(info->scene[i][j]), &ct);
 		i++;
 	}
 	if (ct != 21)

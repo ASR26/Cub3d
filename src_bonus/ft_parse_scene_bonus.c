@@ -6,13 +6,11 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:16:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/21 13:49:11 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/22 14:30:12 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/cub3d_bonus.h"
-
-//void    ft_check_dup_param(t_cub_info *info);
 
 void	ft_read_scene(char *scenefile, t_cub_info *info)
 {
