@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:15:35 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 13:47:19 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:29:20 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* void ft_leaks(void)
 {
-	system("leaks -q cub3d_bonus");
+	system("leaks -q cub3D");
 } */
 
 void	ft_init_info(t_cub_info *info)
@@ -38,7 +38,6 @@ int	ft_cub3d(char *scenefile)
 	t_cub_info		info;
 	t_player_info	player;
 
-	//atexit(ft_leaks);
 	ft_init_info(&info);
 	ft_parse_scene(scenefile, &info);
 	ft_set_player(&player, &info);

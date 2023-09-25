@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 13:53:37 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 13:56:42 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:45:24 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_calculatedist(t_all_info *all, double ang, t_impact *impact)
 	ft_init_impact(&impactx);
 	ft_init_impact(&impacty);
 	ft_init_dist(&dist, all->player, ang);
-	if (dist.distx >= 0)
+	if (dist.distx >= 0 && dist.distx)
 		ft_loopxcrossings(all, &dist, &impactx);
 	if (dist.disty >= 0)
 		ft_loopycrossings(all, &dist, &impacty);
@@ -62,22 +62,4 @@ double	ft_calculate_deltaang(int i)
 			- 2 * side_b * side_c * cos(angle_a));
 	angle_b = asin((sin(angle_a) / side_a) * side_b);
 	return (angle_b);
-}
-
-void	ft_angleloop(t_all_info	*all)
-{
-	double		delta_ang;
-	double		ang;
-	int			i;
-
-	i = 1;
-	ang = M_PI / 4;
-	while (i < WID / 2)
-	{
-		delta_ang = ft_calculate_deltaang(i);
-		ft_calculatedist(all, ang - delta_ang, &(all->window->dist[i]));
-		ft_calculatedist(all, -ang + delta_ang,
-			&(all->window->dist[WID - 1 - i]));
-		i++;
-	}
 }

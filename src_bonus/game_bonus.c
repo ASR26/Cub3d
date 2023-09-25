@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/18 08:55:36 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 13:24:12 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 13:13:13 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,25 @@ void	ft_hook(void *arg)
 
 	all = arg;
 	mlx_key_hook(all->window->mlx, &ft_mlx_keyfunc, all);
-	if (all->window->frame % 5 == 0)
-		mlx_mouse_hook(all->window->mlx, &ft_mlx_mousefunc, all);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_W))
+		ft_move_and_image(all, 0);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_S))
+		ft_move_and_image(all, 1);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_A))
+		ft_move_and_image(all, 2);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_D))
+		ft_move_and_image(all, 3);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_RIGHT))
+		ft_move_and_image(all, 4);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_LEFT))
+		ft_move_and_image(all, 5);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(all->window->mlx);
+	if (mlx_is_key_down(all->window->mlx, MLX_KEY_F))
+		ft_fkey(all);
+	mlx_mouse_hook(all->window->mlx, &ft_mlx_mousefunc, all);
 	if (all->window->attack)
-	{
 		ft_enable_images(all);
-	}
 	all->window->frame++;
 }
 

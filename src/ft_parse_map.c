@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:34:21 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 14:35:28 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:34:15 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,6 @@ int	ft_step(char **map, int row, int col, t_cub_info *info)
 	else if (row == 0 || row == info->hei - 1 || col == 0 \
 			|| col == info->wid -1)
 	{
-		printf("%s\n", map[row]);
-		printf("row -> %i col -> %i c -> %c\n", row, col, map[row][col]);
 		ft_errfreeexit("The map is not closed.", info);
 		return (-2);
 	}

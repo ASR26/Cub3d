@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 15:08:05 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 15:59:44 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:07:25 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ void	ft_put_texturex(t_all_info *all, int i, int j, mlx_texture_t *texture)
 	int		n;
 	int		k;
 
-	scale = WALL_HEI / all->window->dist[i].projy;
+	scale = WALL_HEI / all->window->dist.projy;
 	scale_textur = texture->height / scale ;
-	pos = fmod(all->window->dist[i].posx, 1.0);
+	pos = fmod(all->window->dist.posx, 1.0);
 	pos = pos * texture->width;
 	pos = pos - fmod(pos, 1.0);
 	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
@@ -68,9 +68,9 @@ void	ft_put_texturey(t_all_info *all, int i, int j, mlx_texture_t *texture)
 	int		n;
 	int		k;
 
-	scale = WALL_HEI / all->window->dist[i].projy;
+	scale = WALL_HEI / all->window->dist.projy;
 	scale_textur = texture->height / scale ;
-	pos = fmod(all->window->dist[i].posy, 1.0);
+	pos = fmod(all->window->dist.posy, 1.0);
 	pos = pos * texture->width;
 	pos = pos - fmod(pos, 1.0);
 	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
@@ -92,9 +92,9 @@ void	ft_puttexturemirx(t_all_info *all, int i, int j, mlx_texture_t *texture)
 	int		n;
 	int		k;
 
-	scale = WALL_HEI / all->window->dist[i].projy;
+	scale = WALL_HEI / all->window->dist.projy;
 	scale_textur = texture->height / scale;
-	pos = fmod(all->window->dist[i].posx, 1.0);
+	pos = fmod(all->window->dist.posx, 1.0);
 	pos = (1 - pos) * texture->width;
 	pos = pos - fmod(pos, 1.0);
 	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));
@@ -116,9 +116,9 @@ void	ft_puttexturemiry(t_all_info *all, int i, int j, mlx_texture_t *texture)
 	int		n;
 	int		k;
 
-	scale = WALL_HEI / all->window->dist[i].projy;
+	scale = WALL_HEI / all->window->dist.projy;
 	scale_textur = texture->height / scale;
-	pos = fmod(all->window->dist[i].posy, 1.0);
+	pos = fmod(all->window->dist.posy, 1.0);
 	pos = (1 - pos) * texture->width;
 	pos = pos - fmod(pos, 1.0);
 	n = (int)(scale_textur * (j - (HEI / 2 - scale / 2)));

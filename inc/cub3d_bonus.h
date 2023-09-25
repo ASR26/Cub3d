@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 13:27:20 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 10:01:33 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@
 /* math functions */
 # include <math.h>
 
-# define ROT_SPEED M_PI/36
+# define ROT_SPEED 0.04363323129
 # define MOV_SPEED 0.1f
 # define WID 1000
 # define HEI 800
-# define M_WID HEI / 5
-# define M_HEI HEI / 5
+# define M_WID 160
+# define M_HEI 160
 # define W_WID 350
 # define W_HEI 350
 # define T_WID 275
@@ -52,7 +52,7 @@ typedef struct s_minimapit
 
 typedef struct s_draw
 {
-	mlx_texture_t   *n_wall;
+	mlx_texture_t	*n_wall;
 	mlx_texture_t	*s_wall;
 	mlx_texture_t	*w_wall;
 	mlx_texture_t	*e_wall;
@@ -61,7 +61,7 @@ typedef struct s_draw
 	mlx_texture_t	*weapon_mv[10];
 	mlx_texture_t	*treasurec;
 	mlx_texture_t	*treasureo;
-}			        t_draw;
+}					t_draw;
 
 typedef struct s_treasure
 {
@@ -75,10 +75,10 @@ typedef struct s_treasure
 	float	posh;
 	int		locx;
 	int		locy;
-	float slope;
-	float angdiff;
-	float hypo;
-	float side;
+	float	slope;
+	float	angdiff;
+	float	hypo;
+	float	side;
 }			t_treasure;
 
 typedef struct s_cub_info
@@ -94,7 +94,7 @@ typedef struct s_cub_info
 	char	*door;
 	int		floor_col[3];
 	int		ceil_col[3];
-	int 	doordir[5];
+	int		doordir[5];
 	int		doorx[5];
 	int		doory[5];
 }			t_cub_info;
@@ -125,11 +125,11 @@ typedef struct s_impact_tc
 
 typedef struct s_impact
 {
-	double		dist; //dist from player to first impact with wall 
+	double		dist;
 	char		wall;
 	char		doorc;
-	double		posx; //x pos of player plus ray of distance dist (should be x pos of impact eventually)
-	double		posy; //y pos of player plus ray of distance dist (should be y pos of impact eventually)
+	double		posx;
+	double		posy;
 	double		projx;
 	double		projy;
 	double		deltadist;
@@ -139,12 +139,12 @@ typedef struct s_impact
 typedef struct s_tc_list
 {
 	struct s_tc_list	*prev;
-	int			locx;
-	int			locy;
-	int			begin;
-	int			end;
+	int					locx;
+	int					locy;
+	int					begin;
+	int					end;
 	struct s_tc_list	*next;
-}				t_tc_list;
+}						t_tc_list;
 
 typedef struct s_window_info
 {
@@ -155,28 +155,28 @@ typedef struct s_window_info
 	mlx_image_t	*g_img_mm;
 	mlx_image_t	*g_img_w;
 	mlx_image_t	*g_img_tc;
-	mlx_image_t *g_img_wmv[10];
+	mlx_image_t	*g_img_wmv[10];
 	mlx_image_t	*menustr[8];
 	int			lastclickx;
 	int			leftclick;
 	t_impact	dist[WID];
-	int button;
-	int action;
-	int frame;
-	int menu;
-	int	attack;
-	int	attackbegin;
-	int	t_oc;
-}			t_window_info;
+	int			button;
+	int			action;
+	int			frame;
+	int			menu;
+	int			attack;
+	int			attackbegin;
+	int			t_oc;
+}				t_window_info;
 
 typedef struct s_dist
 {
-	double	distx; //dist to first x crossing in ray direction
-	double	disty; //dist to first y crossing in ray direction
-	double	deltax; //dist from one x crossing to the next
-	double	deltay; //dist from one y crossing to the next
-	double	angx;  //->angle of rayvector with horizon
-	double	angy;  //->angle of rayvector with vertical line
+	double	distx;
+	double	disty;
+	double	deltax;
+	double	deltay;
+	double	angx;
+	double	angy;
 	double	rayang;
 	double	raydirx;
 	double	raydiry;
@@ -195,7 +195,6 @@ typedef struct s_all_info
 	t_draw			*draw;
 }			t_all_info;
 
-
 /* ------------------------------- arr_utils.c ------------------------------ */
 
 int		ft_arrlen(char **arr);
@@ -206,13 +205,13 @@ char	**ft_arrdup(char **arr);
 
 /* ------------------------------- calc_dist.c ------------------------------ */
 
-float   x_projection (float angle, float dist);
-float   y_projection (float angle, float dist);
+float	x_projection(float angle, float dist);
+float	y_projection(float angle, float dist);
 
 /* ------------------------------- check_dup.c ------------------------------ */
 
 void	ft_check_dup_in_line(char *line, int *ct);
-void    ft_check_dup_param(t_cub_info *info);
+void	ft_check_dup_param(t_cub_info *info);
 
 /* --------------------------------- cub3d.c -------------------------------- */
 
@@ -258,7 +257,7 @@ double	ft_getangy(double ang);
 /* ------------------------------- distance.c ------------------------------- */
 
 void	ft_copy_impact(t_impact *copy, t_impact src);
-void 	ft_calculatedist(t_all_info *all, double ang, t_impact *impact);
+void	ft_calculatedist(t_all_info *all, double ang, t_impact *impact);
 double	ft_calculate_deltaang(int i);
 void	ft_angleloop(t_all_info	*all);
 
@@ -324,8 +323,8 @@ int		ft_parse_scene(char *scenefile, t_cub_info *info);
 
 /* ----------------------------- ft_set_player.c ---------------------------- */
 
-double  find_player_x(t_cub_info *info);
-double  find_player_y(t_cub_info *info);
+double	find_player_x(t_cub_info *info);
+double	find_player_y(t_cub_info *info);
 void	set_player_rot(t_player_info *player, char c);
 void	find_player_rot(t_player_info *player, t_cub_info *info);
 void	ft_set_player(t_player_info *player, t_cub_info *info);
@@ -343,8 +342,8 @@ void	ft_maketreasureimage(t_all_info *all);
 void	ft_put_pixel_color(t_all_info *all, int i, int j, char c);
 void	ft_put_texturex(t_all_info *all, int i, int j, mlx_texture_t *texture);
 void	ft_put_texturey(t_all_info *all, int i, int j, mlx_texture_t *texture);
-void	ft_puttexturemirx(t_all_info *all, int i, int j, mlx_texture_t *texture);
-void	ft_puttexturemiry(t_all_info *all, int i, int j, mlx_texture_t *texture);
+void	ft_puttexturemirx(t_all_info *all, int i, int j, mlx_texture_t *textur);
+void	ft_puttexturemiry(t_all_info *all, int i, int j, mlx_texture_t *textur);
 
 /* ---------------------------- game_images_mm.c ---------------------------- */
 
@@ -377,7 +376,7 @@ void	ft_mlx_keyfunc(mlx_key_data_t keydata, void *param);
 
 int		ft_finddooridx(t_all_info *all, int i, char dir);
 void	ft_finddoor(t_all_info *all, t_impact dimpact, int idx);
-int 	ft_seetreasure(t_all_info *all);
+int		ft_seetreasure(t_all_info *all);
 void	ft_opendoor(t_all_info *all);
 
 /* --------------------------- game_enable_image.c -------------------------- */
@@ -408,11 +407,11 @@ void	rotate_z(double *x, double *y, double ang);
 
 /* ------------------------------- movement.c ------------------------------- */
 
-void    move_player_front(t_cub_info *cub, t_player_info *player, int i);
-void    move_player_lateral(t_cub_info *cub, t_player_info *player, int i);
-void    move_player(t_cub_info *cub, t_player_info *player, int i);
-void    rot_player(t_player_info *player, int i);
-void    rot_player_mouse(t_player_info *player, int i, float vel);
+void	move_player_front(t_cub_info *cub, t_player_info *player, int i);
+void	move_player_lateral(t_cub_info *cub, t_player_info *player, int i);
+void	move_player(t_cub_info *cub, t_player_info *player, int i);
+void	rot_player(t_player_info *player, int i);
+void	rot_player_mouse(t_player_info *player, int i, float vel);
 
 /* ---------------------------- movement_utils.c ---------------------------- */
 
@@ -422,7 +421,7 @@ int		ft_checkdiagmove(t_cub_info *cub, t_player_info *player, int tmp[2]);
 
 /* ----------------------------- parse_scene1.c ----------------------------- */
 
-void 	ft_check_oneplayer(t_cub_info *info);
+void	ft_check_oneplayer(t_cub_info *info);
 
 /* ------------------------------- str_utils.c ------------------------------ */
 

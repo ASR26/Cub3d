@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../inc/cub3d.h"
 
 int	ft_checkdiagmove(t_cub_info *cub, t_player_info *player, int tmp[2])

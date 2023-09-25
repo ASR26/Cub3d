@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/13 14:19:31 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 17:10:55 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 12:13:16 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,19 @@
 
 # include <math.h>
 
-# define ROT_SPEED M_PI/36
-# define MOV_SPEED 0.1f
-#define WID 1000
-#define HEI 800
-#define WALL_HEI 600
+# define ROT_SPEED 0.01745329251f
+# define MOV_SPEED 0.05f
+# define WID 1000
+# define HEI 800
+# define WALL_HEI 600
 
 typedef struct s_draw
 {
-	mlx_texture_t   *n_wall;
+	mlx_texture_t	*n_wall;
 	mlx_texture_t	*s_wall;
 	mlx_texture_t	*w_wall;
 	mlx_texture_t	*e_wall;
-}			        t_draw;
+}					t_draw;
 
 typedef struct s_cub_info
 {
@@ -73,15 +73,14 @@ typedef struct s_player_info
 
 typedef struct s_impact
 {
-	double	dist; //dist from player to first impact with wall 
+	double	dist;
 	char	wall;
-	double	posx; //x pos of player plus ray of distance dist (should be x pos of impact eventually)
-	double	posy; //y pos of player plus ray of distance dist (should be y pos of impact eventually)
+	double	posx;
+	double	posy;
 	double	projx;
 	double	projy;
 	double	deltadist;
 }			t_impact;
-
 
 typedef struct s_window_info
 {
@@ -89,7 +88,7 @@ typedef struct s_window_info
 	int			wid;
 	int			hei;
 	mlx_image_t	*g_img;
-	t_impact	dist[WID];
+	t_impact	dist;
 	int			frame;
 	int			menu;
 	mlx_image_t	*menustr[4];
@@ -97,12 +96,12 @@ typedef struct s_window_info
 
 typedef struct s_dist
 {
-	double	distx; //dist to first x crossing in ray direction
-	double	disty; //dist to first y crossing in ray direction
-	double	deltax; //dist from one x crossing to the next
-	double	deltay; //dist from one y crossing to the next
-	double	angx;  //->angle of rayvector with horizon
-	double	angy;  //->angle of rayvector with vertical line
+	double	distx;
+	double	disty;
+	double	deltax;
+	double	deltay;
+	double	angx;
+	double	angy;
 	double	rayang;
 	double	raydirx;
 	double	raydiry;
@@ -121,7 +120,6 @@ typedef struct s_all_info
 	t_draw			*draw;
 }			t_all_info;
 
-
 /* ------------------------------- arr_utils.c ------------------------------ */
 
 int		ft_arrlen(char **arr);
@@ -132,13 +130,13 @@ char	**ft_arrdup(char **arr);
 
 /* ------------------------------- calc_dist.c ------------------------------ */
 
-float   x_projection (float angle, float dist);
-float   y_projection (float angle, float dist);
+float	x_projection(float angle, float dist);
+float	y_projection(float angle, float dist);
 
 /* ------------------------------- check_dup.c ------------------------------ */
 
 void	ft_check_dup_in_line(char *line, int *ct);
-void    ft_check_dup_param(t_cub_info *info);
+void	ft_check_dup_param(t_cub_info *info);
 
 /* --------------------------------- cub3d.c -------------------------------- */
 
@@ -169,9 +167,9 @@ double	ft_getangy(double ang);
 /* ------------------------------- distance.c ------------------------------- */
 
 void	ft_copy_impact(t_impact *copy, t_impact src);
-void 	ft_calculatedist(t_all_info *all, double ang, t_impact *impact);
+void	ft_calculatedist(t_all_info *all, double ang, t_impact *impact);
 double	ft_calculate_deltaang(int i);
-void	ft_angleloop(t_all_info	*all);
+//void	ft_angleloop(t_all_info	*all);
 
 /* ------------------------------- errorfunc.c ------------------------------ */
 
@@ -285,14 +283,14 @@ void	rotate_z(double *x, double *y, double ang);
 /* ------------------------------- movement.c ------------------------------- */
 
 int		ft_checkdiagmove(t_cub_info *cub, t_player_info *player, int tmp[2]);
-void    move_player_front(t_cub_info *cub, t_player_info *player, int i);
-void    move_player_lateral(t_cub_info *cub, t_player_info *player, int i);
-void    move_player(t_cub_info *cub, t_player_info *player, int i);
-void    rot_player(t_player_info *player, int i);
+void	move_player_front(t_cub_info *cub, t_player_info *player, int i);
+void	move_player_lateral(t_cub_info *cub, t_player_info *player, int i);
+void	move_player(t_cub_info *cub, t_player_info *player, int i);
+void	rot_player(t_player_info *player, int i);
 
 /* ----------------------------- parse_scene1.c ----------------------------- */
 
-void 	ft_check_oneplayer(t_cub_info *info);
+void	ft_check_oneplayer(t_cub_info *info);
 
 /* ------------------------------- str_utils.c ------------------------------ */
 

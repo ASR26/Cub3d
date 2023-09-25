@@ -6,7 +6,7 @@
 #    By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/30 09:06:22 by ysmeding          #+#    #+#              #
-#    Updated: 2023/05/14 10:54:03 by ysmeding         ###   ########.fr        #
+#    Updated: 2023/09/25 08:48:01 by ysmeding         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,6 +89,9 @@ all: $(NAME)
 
 $(NAME): $(MYOBJECTS) $(MYHEADERS)
 	@$(AR) -rcs $(NAME) $(MYOBJECTS)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
 	@rm -f *.o

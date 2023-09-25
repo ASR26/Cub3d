@@ -6,7 +6,7 @@
 /*   By: ysmeding <ysmeding@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/22 14:49:06 by ysmeding          #+#    #+#             */
-/*   Updated: 2023/09/22 16:12:05 by ysmeding         ###   ########.fr       */
+/*   Updated: 2023/09/25 09:14:23 by ysmeding         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_put_menu(t_window_info *w)
 	int	linesize;
 	int	start;
 
-	start = HEI - 250;
+	start = HEI - 150;
 	linesize = 30;
 	w->menustr[0] = mlx_put_string(w->mlx, "CONTROLS", 150, start);
 	start += linesize;
