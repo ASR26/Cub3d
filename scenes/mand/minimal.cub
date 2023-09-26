@@ -1,0 +1,11 @@
+NO ./textures/wall.png
+SO ./textures/floor.png		    
+WE ./textures/space.png 
+EA ./textures/wintertrees.png			
+
+F 113,66,52
+C 100,149,237
+
+111
+1N1
+111
